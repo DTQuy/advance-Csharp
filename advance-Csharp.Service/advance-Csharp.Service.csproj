@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>advance_Csharp.Service</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\advance-Csharp.Database\advance-Csharp.Database.csproj" />
+    <ProjectReference Include="..\advance-Csharp.dto\advance-Csharp.dto.csproj" />
+  </ItemGroup>
+
+</Project>
