@@ -1,11 +1,14 @@
 ﻿using advance_Csharp.dto.Request.AppVersion;
 using advance_Csharp.dto.Response.AppVersion;
-using advance_Csharp.Service.Interface;
 using advance_Csharp.Service;
+using advance_Csharp.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace advance_Csharp.Controllers
 {
+    /// <summary>
+    /// Api Controller Application
+    /// </summary>
     [Route("api/application")]
     [ApiController]
     public class ApplicationController : ControllerBase
@@ -17,6 +20,11 @@ namespace advance_Csharp.Controllers
             _ApplicationService = new ApplicationService();
         }
 
+        /// <summary>
+        /// get-version
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Route("get-version")]
         [HttpGet()]
         [MyAppAuthentication("User")]
@@ -35,6 +43,11 @@ namespace advance_Csharp.Controllers
             }
         }
 
+        /// <summary>
+        /// get-version-admin
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Route("get-version-admin")]
         [HttpGet()]
         [MyAppAuthentication("Admin")]

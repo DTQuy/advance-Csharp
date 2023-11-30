@@ -1,6 +1,6 @@
-﻿namespace advance_Csharp.dto.Request.Product
+﻿namespace advance_Csharp.dto.Request.User
 {
-    public class ProductGetListRequest : IPagingRequest
+    public class UserGetListRequest : IPagingRequest
     {
         /// <summary>
         /// Page size
@@ -13,10 +13,8 @@
         public int PageIndex { get; set; } = 1;
 
         /// <summary>
-        /// Search: Category
+        /// Search: Email
         /// </summary>
-        public string Category { get; set; } = string.Empty;
-
-
+        public string Email { get; set; } = string.Empty;
     }
 }

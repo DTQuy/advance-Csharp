@@ -1,20 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace advance_Csharp.Database.Models
+﻿namespace advance_Csharp.dto.Response.User
 {
     /// <summary>
-    /// Table User
+    /// User Response
     /// </summary>
-    [Table("user")]
-    public class User : BaseEntity
+    public class UserResponse
     {
         /// <summary>
-        /// Last name
+        /// User Id
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Last Name
         /// </summary>
         public string LastName { get; set; } = string.Empty;
 
         /// <summary>
-        /// First name
+        /// First Name
         /// </summary>
         public string FirstName { get; set; } = string.Empty;
 
@@ -24,7 +26,7 @@ namespace advance_Csharp.Database.Models
         public string Email { get; set; } = string.Empty;
 
         /// <summary>
-        /// Phone number
+        /// Phone Number
         /// </summary>
         public string PhoneNumber { get; set; } = string.Empty;
 
@@ -33,5 +35,17 @@ namespace advance_Csharp.Database.Models
         /// </summary>
         public string Address { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Created At
+        /// </summary>
+        public DateTimeOffset CreatedAt { get; set; }
+
+        /// <summary>
+        /// Created At UtcNow
+        /// </summary>
+        public UserResponse()
+        {
+            CreatedAt = DateTimeOffset.UtcNow;
+        }
     }
 }

@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace advance_Csharp.dto.Response.AppVersion
+﻿namespace advance_Csharp.dto.Response.AppVersion
 {
+    /// <summary>
+    /// App Version Response
+    /// </summary>
     public class AppVersionResponse
     {
+        /// <summary>
+        /// Id
+        /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Version
+        /// </summary>
         public string Version { get; set; } = string.Empty;
     }
 }

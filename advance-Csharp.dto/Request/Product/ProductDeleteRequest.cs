@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace advance_Csharp.dto.Request.Product
+﻿namespace advance_Csharp.dto.Request.Product
 {
+    /// <summary>
+    /// ProductDeleteRequest
+    /// </summary>
     public class ProductDeleteRequest
     {
+        /// <summary>
+        /// Product Id
+        /// </summary>
         public Guid Id { get; set; }
     }
 }

@@ -1,6 +1,9 @@
-﻿namespace advance_Csharp.dto.Response.AppVersion
+﻿namespace advance_Csharp.dto.Response.User
 {
-    public class AppVersionGetListResponse
+    /// <summary>
+    /// User GetList Response
+    /// </summary>
+    public class UserGetListResponse
     {
         /// <summary>
         /// Page size
@@ -15,11 +18,6 @@
         /// <summary>
         /// Data return
         /// </summary>
-        public List<AppVersionResponse> Data { get; set; } = new List<AppVersionResponse>();
-
-        /// <summary>
-        /// Total
-        /// </summary>
-        public long Total { get; set; } // bonus
+        public List<UserResponse> Data { get; set; } = new List<UserResponse>();
     }
 }

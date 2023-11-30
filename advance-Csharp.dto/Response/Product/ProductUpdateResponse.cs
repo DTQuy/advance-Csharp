@@ -1,15 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace advance_Csharp.dto.Response.Product
+﻿namespace advance_Csharp.dto.Response.Product
 {
+    /// <summary>
+    /// Product Update Response
+    /// </summary>
     public class ProductUpdateResponse
     {
-        public string Message { get; set; }
-        public ProductResponse OldProduct { get; set; }
-        public ProductResponse UpdatedProduct { get; set; }
+        /// <summary>
+        /// Message
+        /// </summary>
+        public string? Message { get; set; }
+
+        /// <summary>
+        /// Old Product
+        /// </summary>
+        public ProductResponse? OldProduct { get; set; }
+
+        /// <summary>
+        /// Updated Product
+        /// </summary>
+        public ProductResponse? UpdatedProduct { get; set; }
     }
 }

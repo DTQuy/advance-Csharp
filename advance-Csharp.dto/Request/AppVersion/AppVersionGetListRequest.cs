@@ -21,6 +21,9 @@ namespace advance_Csharp.dto.Request.AppVersion
         /// </summary>
         public int PageIndex { get; set; } = 1;
 
+        /// <summary>
+        /// Search by Version
+        /// </summary>
         public string Version { get; set; } = string.Empty;
     }
 }

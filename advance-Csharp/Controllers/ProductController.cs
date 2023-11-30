@@ -12,17 +12,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace advance_Csharp.Controllers
 {
+    /// <summary>
+    ///  Controller Api product 
+    /// </summary>
     [Route("api/product")]
     [ApiController]
     public class ProductController : ControllerBase
-    {
+    {       
         private IApplicationService _ApplicationService;
 
+        /// <summary>
+        /// Product Controller
+        /// </summary>
         public ProductController()
         {
             _ApplicationService = new ApplicationService();
         }
 
+        /// <summary>
+        /// get-product-user
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Route("get-product-user")]
         [HttpGet()]
         [MyAppAuthentication("User")]
@@ -41,6 +52,11 @@ namespace advance_Csharp.Controllers
             }
         }
 
+        /// <summary>
+        /// get-product-admin
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Route("get-product-admin")]
         [HttpGet()]
         [MyAppAuthentication("Admin")]
@@ -83,12 +99,12 @@ namespace advance_Csharp.Controllers
 
                 using (AdvanceCsharpContext context = new AdvanceCsharpContext())
                 {
-                    // Thêm sản phẩm mới vào cơ sở dữ liệu
+                    // Add new products to the database
                     context.Products.Add(newProduct);
                     await context.SaveChangesAsync();
                 }
 
-                // Tạo DTO cho thông tin sản phẩm
+                // Create DTO for product information              
                 var productResponse = new ProductResponse
 
                 {
@@ -101,7 +117,7 @@ namespace advance_Csharp.Controllers
                     Category = newProduct.Category
                 };
 
-                // Tạo DTO cho response
+                // Create DTO for response
                 var response = new ProductCreateResponse
                 {
                     Message = "Product created successfully",
@@ -112,12 +128,11 @@ namespace advance_Csharp.Controllers
             }
             catch (Exception ex)
             {
-                // Log lỗi hoặc gửi lỗi đến một dịch vụ log
+                // Log errors or send errors to a logging service
                 Console.WriteLine(ex.Message);
                 return StatusCode(500, ex.Message);
             }
         }
-
 
         /// <summary>
         /// update-product
@@ -131,7 +146,7 @@ namespace advance_Csharp.Controllers
         {
             try
             {
-                // Kiểm tra xem request có hợp lệ không
+                // Check if the request is valid
                 if (!request.IsPriceValid)
                 {
                     return BadRequest("Invalid Price format. Please enter a valid number.");
@@ -139,14 +154,14 @@ namespace advance_Csharp.Controllers
 
                 using (AdvanceCsharpContext context = new AdvanceCsharpContext())
                 {
-                    // Kiểm tra xem sản phẩm có tồn tại không
+                    // Check if the product exists
                     var existingProduct = await context.Products.FindAsync(request.Id);
                     if (existingProduct == null)
                     {
                         return NotFound("Product not found");
                     }
 
-                    // Lưu thông tin cũ của sản phẩm
+                    // Save old product information
                     var oldProduct = new ProductResponse
                     {
                         Id = existingProduct.Id,
@@ -158,7 +173,7 @@ namespace advance_Csharp.Controllers
                         Category = existingProduct.Category
                     };
 
-                    // Cập nhật thông tin sản phẩm
+                    // Update product information
                     existingProduct.Name = request.Name;
                     existingProduct.Price = request.Price;
                     existingProduct.Quantity = request.Quantity;
@@ -166,10 +181,10 @@ namespace advance_Csharp.Controllers
                     existingProduct.Images = request.Images;
                     existingProduct.Category = request.Category;
 
-                    // Lưu thay đổi vào cơ sở dữ liệu
+                    // Save changes to the database
                     await context.SaveChangesAsync();
 
-                    // Tạo DTO cho thông tin sản phẩm sau khi cập nhật
+                    // Generate DTO for product information after update
                     var updatedProduct = new ProductResponse
                     {
                         Id = existingProduct.Id,
@@ -181,7 +196,7 @@ namespace advance_Csharp.Controllers
                         Category = existingProduct.Category
                     };
 
-                    // Tạo DTO cho response
+                    // Create DTO for response
                     var response = new ProductUpdateResponse
                     {
                         Message = "Product updated successfully",
@@ -194,12 +209,11 @@ namespace advance_Csharp.Controllers
             }
             catch (Exception ex)
             {
-                // Log lỗi hoặc gửi lỗi đến một dịch vụ log
+                // Log errors or send errors to a logging service
                 Console.WriteLine(ex.Message);
                 return StatusCode(500, ex.Message);
             }
         }
-
 
         /// <summary>
         /// Delete
@@ -215,14 +229,14 @@ namespace advance_Csharp.Controllers
             {
                 using (AdvanceCsharpContext context = new AdvanceCsharpContext())
                 {
-                    // Kiểm tra xem sản phẩm có tồn tại không
+                    // Check if the product exists
                     var existingProduct = await context.Products.FindAsync(id);
                     if (existingProduct == null)
                     {
                         return NotFound("Product not found");
                     }
 
-                    // Lưu thông tin sản phẩm cũ
+                    // Save old product information
                     var deletedProduct = new ProductResponse
                     {
                         Id = existingProduct.Id,
@@ -234,20 +248,20 @@ namespace advance_Csharp.Controllers
                         Category = existingProduct.Category
                     };
 
-                    // Xóa sản phẩm
+                    // Delete product
                     context.Products.Remove(existingProduct);
 
-                    // Lưu thay đổi vào cơ sở dữ liệu
+                    // Save changes to the database
                     await context.SaveChangesAsync();
 
-                    // Trả về thông báo thành công và thông tin của sản phẩm đã xóa
+                    // Returns a success message and information about the deleted product
                     var response = new ProductDeleteResponse("Product deleted successfully", deletedProduct);
                     return Ok(response);
                 }
             }
             catch (Exception ex)
             {
-                // Log lỗi hoặc gửi lỗi đến một dịch vụ log
+                // Log errors or send errors to a logging service
                 Console.WriteLine(ex.Message);
                 return StatusCode(500, ex.Message);
             }

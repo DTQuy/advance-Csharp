@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace advance_Csharp.dto.Request
+﻿namespace advance_Csharp.dto.Request
 {
+    /// <summary>
+    /// Interface IPagingRequest
+    /// </summary>
     public interface IPagingRequest
     {
+        /// <summary>
+        /// Page Size
+        /// </summary>
         public int PageSize { get; set; }
+
+        /// <summary>
+        /// Page Index
+        /// </summary>
         public int PageIndex { get; set; }
     }
 }
