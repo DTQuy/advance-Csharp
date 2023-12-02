@@ -37,5 +37,15 @@ namespace advance_Csharp.Database.Models
         /// Category
         /// </summary>
         public string Category { get; set; } = string.Empty;
+
+        /*// <summary>
+        /// Parse Price from string to decimal
+        /// </summary>
+        [NotMapped]
+        public decimal PriceDecimal
+        {
+            get => decimal.Parse(Price);
+            set => Price = value.ToString();
+        }*/
     }
 }

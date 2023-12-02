@@ -1,7 +1,7 @@
 ﻿using advance_Csharp.dto.Request.AppVersion;
 using advance_Csharp.dto.Response.AppVersion;
-using advance_Csharp.Service;
 using advance_Csharp.Service.Interface;
+using advance_Csharp.Service.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace advance_Csharp.Controllers
@@ -13,7 +13,7 @@ namespace advance_Csharp.Controllers
     [ApiController]
     public class ApplicationController : ControllerBase
     {
-        private IApplicationService _ApplicationService;
+        private readonly IApplicationService _ApplicationService;
 
         public ApplicationController()
         {

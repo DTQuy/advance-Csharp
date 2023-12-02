@@ -24,6 +24,11 @@ namespace advance_Csharp.Database.Models
         public string Email { get; set; } = string.Empty;
 
         /// <summary>
+        /// Password
+        /// </summary>
+        public string Password {  get; set; } = string.Empty;
+
+        /// <summary>
         /// Phone number
         /// </summary>
         public string PhoneNumber { get; set; } = string.Empty;

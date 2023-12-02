@@ -5,11 +5,30 @@ namespace advance_Csharp.Database
 {
     public class AdvanceCsharpContext : DbContext
     {
+        /// <summary>
+        /// AppVersions
+        /// </summary>
         public DbSet<AppVersion>? AppVersions { get; set; }
+
+        /// <summary>
+        /// Products
+        /// </summary>
         public DbSet<Product>? Products { get; set; }
 
+        /// <summary>
+        /// Users
+        /// </summary>
         public DbSet<User>? Users { get; set; }
 
+        /// <summary>
+        /// Role
+        /// </summary>
+        public DbSet<Role>? roles { get; set; }
+
+        /// <summary>
+        /// Connectionstring
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder

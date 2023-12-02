@@ -16,8 +16,14 @@
         public int PageIndex { get; set; }
 
         /// <summary>
+        /// Total Product
+        /// </summary>
+        public long Total { get; set; }
+
+        /// <summary>
         /// Data return
         /// </summary>
         public List<ProductResponse> Data { get; set; } = new List<ProductResponse>();
+
     }
 }
