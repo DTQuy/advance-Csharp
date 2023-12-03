@@ -47,7 +47,18 @@ namespace advance_Csharp.Service.Service
                     decimal priceTo = Convert.ToDecimal(request.PriceTo);
                     query = query.Where(a => Convert.ToDecimal(a.Price) <= priceTo);
                 }
-                productGetListResponse.Total = await query.CountAsync();
+
+                // Count the total number of products according to filtered conditions
+                productGetListResponse.TotalProduct = await query.CountAsync();
+
+                // Calculate the number of pages and total pages
+                int totalPages = (int)Math.Ceiling((double)productGetListResponse.TotalProduct / request.PageSize);
+                productGetListResponse.TotalPages = totalPages;
+
+                // Perform pagination and get data for the current page
+                int startIndex = (request.PageIndex - 1) * request.PageSize;
+                int endIndex = startIndex + request.PageSize;
+                query = query.Skip(startIndex).Take(request.PageSize);
 
                 productGetListResponse.Data = await query.Select(a => new ProductResponse
                 {
@@ -55,7 +66,7 @@ namespace advance_Csharp.Service.Service
                     Name = a.Name,
                     Category = a.Category,
                     Price = a.Price,
-                }).ToListAsync();
+                }).ToListAsync();           
             }
 
             return productGetListResponse;

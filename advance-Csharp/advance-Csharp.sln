@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "advance-Csharp", "advance-Csharp.csproj", "{39547215-13B6-4769-9259-66CE1A84683A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "advance-Csharp", "advance-Csharp.csproj", "{39547215-13B6-4769-9259-66CE1A84683A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "advance-Csharp.dto", "..\advance-Csharp.dto\advance-Csharp.dto.csproj", "{2C741E82-D36C-4152-9398-FCDCBACACC36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "advance-Csharp.dto", "..\advance-Csharp.dto\advance-Csharp.dto.csproj", "{2C741E82-D36C-4152-9398-FCDCBACACC36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "advance-Csharp.Service", "..\advance-Csharp.Service\advance-Csharp.Service.csproj", "{6102E081-4D17-4844-872D-3BBC228F2DDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "advance-Csharp.Service", "..\advance-Csharp.Service\advance-Csharp.Service.csproj", "{6102E081-4D17-4844-872D-3BBC228F2DDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "advance-Csharp.Database", "..\advance-Csharp.Database\advance-Csharp.Database.csproj", "{3C717BF6-A0FB-4E5B-A4F3-3302409E40D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "advance-Csharp.Database", "..\advance-Csharp.Database\advance-Csharp.Database.csproj", "{3C717BF6-A0FB-4E5B-A4F3-3302409E40D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

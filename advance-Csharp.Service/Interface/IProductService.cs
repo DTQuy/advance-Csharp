@@ -32,6 +32,7 @@ namespace advance_Csharp.Service.Interface
         /// <param name="request"></param>
         /// <returns></returns>
         Task<ProductDeleteResponse> DeleteProduct(ProductDeleteRequest request);
+
         Task<ProductDeleteResponse> DeleteProduct(Guid id);
     }
 }

@@ -31,6 +31,11 @@
         public string PhoneNumber { get; set; } = string.Empty;
 
         /// <summary>
+        /// Password
+        /// </summary>
+        public string Password { get; set; } =string.Empty;
+
+        /// <summary>
         /// Address
         /// </summary>
         public string Address { get; set; } = string.Empty;

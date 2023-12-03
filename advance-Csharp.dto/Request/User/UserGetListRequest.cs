@@ -16,5 +16,10 @@
         /// Search: Email
         /// </summary>
         public string Email { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Phone Number
+        /// </summary>
+        public string PhoneNumber { get; set; } = string.Empty;
     }
 }

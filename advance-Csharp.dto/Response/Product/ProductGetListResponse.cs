@@ -16,9 +16,14 @@
         public int PageIndex { get; set; }
 
         /// <summary>
+        /// Total Pages
+        /// </summary>
+        public int TotalPages { get; set; }
+
+        /// <summary>
         /// Total Product
         /// </summary>
-        public long Total { get; set; }
+        public long TotalProduct { get; set; }
 
         /// <summary>
         /// Data return
