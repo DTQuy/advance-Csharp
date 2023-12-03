@@ -4,6 +4,7 @@ using advance_Csharp.dto.Request.Product;
 using advance_Csharp.dto.Response.Product;
 using advance_Csharp.Service.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace advance_Csharp.Service.Service
 {
@@ -24,7 +25,11 @@ namespace advance_Csharp.Service.Service
 
             using (AdvanceCsharpContext context = new())
             {
-                IQueryable<Product> query = context.Products;
+                IQueryable<Product> query = context.Products ?? Enumerable.Empty<Product>().AsQueryable();
+                if (query == null)
+                {                  
+                    return productGetListResponse;
+                }
 
                 if (!string.IsNullOrEmpty(request.Name))
                 {
@@ -66,6 +71,9 @@ namespace advance_Csharp.Service.Service
                     Name = a.Name,
                     Category = a.Category,
                     Price = a.Price,
+                    Quantity = a.Quantity,
+                    Unit = a.Unit,
+                    CreatedAt = a.CreatedAt,
                 }).ToListAsync();           
             }
 
@@ -93,9 +101,11 @@ namespace advance_Csharp.Service.Service
 
                 using (AdvanceCsharpContext context = new())
                 {
-                    // add data to SQL
-                    _ = context.Products.Add(newProduct);
-                    _ = await context.SaveChangesAsync();
+                    if (context.Products != null)
+                    {
+                        _ = context.Products.Add(newProduct);
+                        _ = await context.SaveChangesAsync();
+                    }
                 }
 
                 // create DTO to product info
@@ -145,8 +155,19 @@ namespace advance_Csharp.Service.Service
                 }
 
                 using AdvanceCsharpContext context = new();
+                // Check if context.Products is null
+                if (context.Products == null)
+                {
+                    // Handle the case where context.Products is null
+                    return new ProductUpdateResponse
+                    {
+                        Message = "Error: context.Products is null."
+                    };
+                }
+
                 // Check if the product exists
-                Product existingProduct = await context.Products.FindAsync(request.Id);
+                var existingProduct = await context.Products.FindAsync(request.Id);
+
                 if (existingProduct == null)
                 {
                     return new ProductUpdateResponse
@@ -223,11 +244,19 @@ namespace advance_Csharp.Service.Service
             try
             {
                 using AdvanceCsharpContext context = new();
+                // Check if context.Products is null
+                if (context.Products == null)
+                {
+                    // Handle the case where context.Products is null
+                    return new ProductDeleteResponse("Error: context.Products is null", new ProductResponse());
+                }
+
                 // Check if the product exists
-                Product existingProduct = await context.Products.FindAsync(id);
+                Product? existingProduct = await context.Products.FindAsync(id);
+
                 if (existingProduct == null)
                 {
-                    return new ProductDeleteResponse("Product not found", null);
+                    return new ProductDeleteResponse("Product not found", new ProductResponse());
                 }
 
                 // Save old product information
@@ -255,10 +284,9 @@ namespace advance_Csharp.Service.Service
             {
                 // Log errors or send errors to a logging service
                 Console.WriteLine(ex.Message);
-                return new ProductDeleteResponse("Error deleting product", null);
+                return new ProductDeleteResponse("Error deleting product", new ProductResponse());
             }
         }
-
 
         public Task<ProductDeleteResponse> DeleteProduct(ProductDeleteRequest request)
         {

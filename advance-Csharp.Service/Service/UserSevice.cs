@@ -25,7 +25,11 @@ namespace advance_Csharp.Service.Service
             };
             using (AdvanceCsharpContext context = new())
             {
-                IQueryable<User> query = context.Users;
+                IQueryable<User> query = context.Users ?? Enumerable.Empty<User>().AsQueryable();
+                if (query == null)
+                {
+                    return userGetListResponse;
+                }
                 if (!string.IsNullOrEmpty(request.Email)) 
                 {
                    query = query.Where(a => a.Email.Contains(request.Email));
@@ -35,7 +39,7 @@ namespace advance_Csharp.Service.Service
                     query = query.Where(a => a.PhoneNumber.Contains(request.PhoneNumber));
                 }
 
-                // Count the total number of products according to filtered conditions
+                // Count the total number of User according to filtered conditions
                 userGetListResponse.TotalUser = await query.CountAsync();
 
                 // Calculate the number of pages and total pages
@@ -50,8 +54,12 @@ namespace advance_Csharp.Service.Service
                 userGetListResponse.Data = await query.Select(a => new UserResponse
                 {
                     Id = a.Id,
+                    LastName = a.LastName,
+                    FirstName = a.FirstName,
                     Email = a.Email,
-                    PhoneNumber = a.PhoneNumber
+                    PhoneNumber = a.PhoneNumber,
+                    Address = a.Address,
+                    CreatedAt = a.CreatedAt,
                 }).ToListAsync();
             }
             return userGetListResponse;
@@ -79,9 +87,11 @@ namespace advance_Csharp.Service.Service
 
                 using (AdvanceCsharpContext context = new())
                 {
-                    // add data to SQL
-                    _ = context.Users.Add(newUser);
-                    _ = await context.SaveChangesAsync();
+                    if (context.Users != null)
+                    {
+                        _ = context.Users.Add(newUser);
+                        _ = await context.SaveChangesAsync();
+                    }
                 }
 
                 // create DTO to user info
@@ -99,7 +109,7 @@ namespace advance_Csharp.Service.Service
                 // create DTO to respons
                 UserCreateResponse response = new()
                 {
-                    Message = "Product created successfully",
+                    Message = "User created successfully",
                     userResponse = userResponse
                 };
 
@@ -131,13 +141,23 @@ namespace advance_Csharp.Service.Service
                 }
 
                 using AdvanceCsharpContext context = new();
-                // Check if the User exists
-                User existingUser = await context.Users.FindAsync(request.Id);
+                // Check if context.User is null
+                if (context.Users == null)
+                {
+                    // Handle the case where context.User is null
+                    return new UserUpdateResponse
+                    {
+                        Message = "Error: context.User is null."
+                    };
+                }
+
+                var existingUser = await context.Users.FindAsync(request.Id);
+
                 if (existingUser == null)
                 {
                     return new UserUpdateResponse
                     {
-                        Message = "User not found"
+                        Message = "Product not found"
                     };
                 }
 
@@ -212,11 +232,18 @@ namespace advance_Csharp.Service.Service
             try
             {
                 using AdvanceCsharpContext context = new();
-                // Check if the user exists
-                User existingUser = await context.Users.FindAsync(id);
+                // Check if context.User is null
+                if (context.Users == null)
+                {
+                    // Handle the case where context.Products is null
+                    return new UserDeleteResponse("Error: context.Products is null", new UserResponse());
+                }
+                // Check if the product exists
+                User? existingUser = await context.Users.FindAsync(id);
+
                 if (existingUser == null)
                 {
-                    return new UserDeleteResponse("User not found", null);
+                    return new UserDeleteResponse("Product not found", new UserResponse());
                 }
 
                 // Save old user information
@@ -244,7 +271,7 @@ namespace advance_Csharp.Service.Service
             {
                 // Log errors or send errors to a logging service
                 Console.WriteLine(ex.Message);
-                return new UserDeleteResponse("Error deleting product", null);
+                return new UserDeleteResponse("Error deleting product", new UserResponse());
             }
         }
 

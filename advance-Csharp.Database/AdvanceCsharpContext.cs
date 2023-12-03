@@ -23,7 +23,7 @@ namespace advance_Csharp.Database
         /// <summary>
         /// Role
         /// </summary>
-        public DbSet<Role>? roles { get; set; }
+        public DbSet<Role>? Roles { get; set; }
 
         /// <summary>
         /// Connectionstring
