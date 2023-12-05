@@ -3,6 +3,7 @@ using advance_Csharp.dto.Response.AppVersion;
 using advance_Csharp.Service.Interface;
 using advance_Csharp.Service.Service;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace advance_Csharp.Controllers
 {
@@ -13,11 +14,13 @@ namespace advance_Csharp.Controllers
     [ApiController]
     public class ApplicationController : ControllerBase
     {
-        private readonly IApplicationService _ApplicationService;
+        private readonly IApplicationService _applicationService;
+        private readonly ILoggingService _loggingService;
 
         public ApplicationController()
         {
-            _ApplicationService = new ApplicationService();
+            _applicationService = new ApplicationService();
+            _loggingService = new LoggingService();
         }
 
         /// <summary>
@@ -32,13 +35,14 @@ namespace advance_Csharp.Controllers
         {
             try
             {
-                AppVersionGetListResponse response = await _ApplicationService.GetApplicationVersionList(request);
+                AppVersionGetListResponse response = await _applicationService.GetApplicationVersionList(request);
+                _loggingService.LogInfo(JsonSerializer.Serialize(response));
                 return new JsonResult(response);
             }
             catch (Exception ex)
             {
                 // send to logging service
-                Console.WriteLine(ex.Message);
+                _loggingService.LogError(ex);
                 return StatusCode(500, ex.Message);
             }
         }
@@ -55,13 +59,14 @@ namespace advance_Csharp.Controllers
         {
             try
             {
-                AppVersionGetListResponse response = await _ApplicationService.GetApplicationVersionList(request);
+                AppVersionGetListResponse response = await _applicationService.GetApplicationVersionList(request);
+                _loggingService.LogInfo(JsonSerializer.Serialize(response));
                 return new JsonResult(response);
             }
             catch (Exception ex)
             {
                 // send to logging service
-                Console.WriteLine(ex.Message);
+                _loggingService.LogError(ex);
                 return StatusCode(500, ex.Message);
             }
         }

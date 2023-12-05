@@ -6,8 +6,12 @@ namespace advance_Csharp.Database.Models
     /// Role
     /// </summary>
     [Table("role")]
-    public class Role : BaseEntity
+    public class Role
     {
+        /// <summary>
+        /// Id Role
+        /// </summary>
+        public Guid IdRole { get; set; }
         /// <summary>
         /// User id
         /// </summary>

@@ -4,7 +4,6 @@ using advance_Csharp.dto.Request.Product;
 using advance_Csharp.dto.Response.Product;
 using advance_Csharp.Service.Interface;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace advance_Csharp.Service.Service
 {
@@ -27,7 +26,7 @@ namespace advance_Csharp.Service.Service
             {
                 IQueryable<Product> query = context.Products ?? Enumerable.Empty<Product>().AsQueryable();
                 if (query == null)
-                {                  
+                {
                     return productGetListResponse;
                 }
 
@@ -74,7 +73,7 @@ namespace advance_Csharp.Service.Service
                     Quantity = a.Quantity,
                     Unit = a.Unit,
                     CreatedAt = a.CreatedAt,
-                }).ToListAsync();           
+                }).ToListAsync();
             }
 
             return productGetListResponse;
@@ -166,7 +165,7 @@ namespace advance_Csharp.Service.Service
                 }
 
                 // Check if the product exists
-                var existingProduct = await context.Products.FindAsync(request.Id);
+                Product? existingProduct = await context.Products.FindAsync(request.Id);
 
                 if (existingProduct == null)
                 {
