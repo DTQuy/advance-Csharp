@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using System.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace advance_Csharp
 {
@@ -10,7 +9,7 @@ namespace advance_Csharp
 
         public MyAppAuthenticationAttribute(string role)
         {
-            this.Role = role;
+            Role = role;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

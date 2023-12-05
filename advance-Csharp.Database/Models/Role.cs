@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace advance_Csharp.Database.Models
 {
@@ -11,6 +12,7 @@ namespace advance_Csharp.Database.Models
         /// <summary>
         /// Id Role
         /// </summary>
+        [Key]
         public Guid IdRole { get; set; }
         /// <summary>
         /// User id
