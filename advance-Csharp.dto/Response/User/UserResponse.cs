@@ -45,6 +45,8 @@
         /// </summary>
         public DateTimeOffset CreatedAt { get; set; }
 
+        public string Token { get; set; } = string.Empty;
+
         /// <summary>
         /// Created At UtcNow
         /// </summary>

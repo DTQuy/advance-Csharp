@@ -1,0 +1,54 @@
+﻿using advance_Csharp.Database.Models;
+using advance_Csharp.Database;
+using advance_Csharp.dto.Request.AppVersion;
+using advance_Csharp.dto.Response.AppVersion;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using advance_Csharp.dto.Response.Role;
+using advance_Csharp.dto.Request.Role;
+using advance_Csharp.dto.Response.User;
+using advance_Csharp.Service.Interface;
+
+namespace advance_Csharp.Service.Service
+{
+    public class RoleService : IRoleService
+    {
+        /// <summary>
+        /// Search Role
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<RoleSearchResponse> SearchRole(RoleSearchRequest request)
+        {
+            RoleSearchResponse roleSearchResponse = new();
+            try
+            {
+                using AdvanceCsharpContext context = new();
+                IQueryable<Role> query = context.Roles != null ? context.Roles.AsQueryable() : Enumerable.Empty<Role>().AsQueryable();
+
+                if (!string.IsNullOrEmpty(request.RoleName))
+                {
+                    query = query.Where(a => a.RoleName.Contains(request.RoleName));
+                }
+
+                roleSearchResponse.Data = await query.Select(a => new RoleResponse
+                {
+                    RoleName = a.RoleName,
+                }).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, log, or rethrow
+                roleSearchResponse.Message = $"An error occurred while searching for roles: {ex.Message}";
+            }
+
+            return roleSearchResponse;
+        }
+
+
+    }
+}

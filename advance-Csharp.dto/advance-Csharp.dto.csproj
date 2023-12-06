@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\advance-Csharp.Database\advance-Csharp.Database.csproj" />
+  </ItemGroup>
+
 </Project>

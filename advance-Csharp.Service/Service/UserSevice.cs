@@ -1,16 +1,24 @@
 ﻿using advance_Csharp.Database;
 using advance_Csharp.Database.Models;
 using advance_Csharp.dto.Request.User;
-using advance_Csharp.dto.Response.Product;
 using advance_Csharp.dto.Response.User;
 using advance_Csharp.Service.Interface;
-using BCrypt.Net;
+using Castle.Core.Internal;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 
 namespace advance_Csharp.Service.Service
 {
     public class UserService : IUserService
     {
+        private readonly string email;
+
+        public UserService(AdvanceCsharpContext context, IUnitWork unitWork, IHttpContextAccessor httpContextAccessor)
+        {
+            email = httpContextAccessor.HttpContext?.User?.Identity?.Name ?? "System";
+        }
+
         /// <summary>
         /// UserGetListResponse
         /// </summary>
@@ -60,10 +68,67 @@ namespace advance_Csharp.Service.Service
                     PhoneNumber = a.PhoneNumber,
                     Address = a.Address,
                     CreatedAt = a.CreatedAt,
+                    Token = a.Token,
                 }).ToListAsync();
             }
             return userGetListResponse;
 
+        }
+
+        /// <summary>
+        /// GetUserById
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<UserGetByIdResponse> GetUserById(UserGetByIdRequest request)
+        {
+            UserGetByIdResponse userGetByIdResponse = new();
+
+            try
+            {
+                using AdvanceCsharpContext context = new();
+                // Check if context.Users is null
+                if (context.Users == null)
+                {
+                    // Handle the case where context.Users is null
+                    return new UserGetByIdResponse
+                    {
+                        Message = "Error: context.Users is null."
+                    };
+                }
+
+                // Query the user from the database based on Id
+                var user = await context.Users.FindAsync(request.Id);
+
+                // Check if the user is not found
+                if (user == null)
+                {
+                    // Handle the case where the user is not found
+                    userGetByIdResponse.Message = "User not found";
+                }
+                else
+                {
+                    // Convert user information to UserResponse object
+                    userGetByIdResponse.Data = new UserResponse
+                    {
+                        Id = user.Id,
+                        LastName = user.LastName,
+                        FirstName = user.FirstName,
+                        Email = user.Email,
+                        PhoneNumber = user.PhoneNumber,
+                        Address = user.Address,
+                        CreatedAt = user.CreatedAt, 
+                        Token = user.Token,    
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, log, or rethrow
+                userGetByIdResponse.Message = $"An error occurred while retrieving user information: {ex.Message}";
+            }
+
+            return userGetByIdResponse;
         }
 
         /// <summary>
@@ -82,7 +147,8 @@ namespace advance_Csharp.Service.Service
                     Email = request.Email,
                     Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
                     PhoneNumber = request.PhoneNumber,
-                    Address = request.Address
+                    Address = request.Address,                   
+                    
                 };
 
                 using (AdvanceCsharpContext context = new())
@@ -103,14 +169,15 @@ namespace advance_Csharp.Service.Service
                     Email = newUser.Email,
                     Password = newUser.Password,
                     PhoneNumber = newUser.PhoneNumber,
-                    Address = newUser.Address
+                    Address = newUser.Address,
+                    Token = newUser.Token,
                 };
 
                 // create DTO to respons
                 UserCreateResponse response = new()
                 {
                     Message = "User created successfully",
-                    userResponse = userResponse
+                    UserResponse = userResponse
                 };
 
                 return response;
@@ -157,7 +224,7 @@ namespace advance_Csharp.Service.Service
                 {
                     return new UserUpdateResponse
                     {
-                        Message = "Product not found"
+                        Message = " not found"
                     };
                 }
 
@@ -171,7 +238,8 @@ namespace advance_Csharp.Service.Service
                     Password = existingUser.Password,
                     PhoneNumber = existingUser.PhoneNumber,
                     Address = existingUser.Address,
-                    CreatedAt = existingUser.CreatedAt
+                    CreatedAt = existingUser.CreatedAt,
+                    Token = existingUser.Token,
                 };
 
                 // Update User information
@@ -198,7 +266,8 @@ namespace advance_Csharp.Service.Service
                     Password = existingUser.Password,
                     PhoneNumber = existingUser.PhoneNumber,
                     Address = existingUser.Address,
-                    CreatedAt = existingUser.CreatedAt
+                    CreatedAt = existingUser.CreatedAt,
+                    Token = existingUser.Token,
                 };
 
                 // Create DTO for response
@@ -255,7 +324,8 @@ namespace advance_Csharp.Service.Service
                     Email = existingUser.Email,
                     Password = existingUser.Password ?? string.Empty,
                     PhoneNumber = existingUser.PhoneNumber ?? string.Empty,
-                    Address = existingUser.Address ?? string.Empty
+                    Address = existingUser.Address ?? string.Empty,
+                    Token = existingUser.Token ?? string.Empty
                 };
 
                 // Delete user
@@ -279,5 +349,113 @@ namespace advance_Csharp.Service.Service
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Generate Token
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<UserGenerateTokenResponse> GenerateToken(UserGenerateTokenRequest request)
+        {
+            UserGenerateTokenResponse response = new();
+            using AdvanceCsharpContext context = new();
+            try
+            {
+                if (context != null && context.Users != null)
+                {
+                    // Check if the user exists
+                    User? existedUser = await context.Users.FindAsync(request.UserId);
+
+                    if (existedUser != null)
+                    {
+                        // Update user information
+                        if (!string.IsNullOrEmpty(request.Token))
+                        {
+                            existedUser.Token = request.Token;
+                        }
+
+                        // Save changes to the database
+                        await context.SaveChangesAsync();
+
+                        // Generate DTO for user information after update
+                        response.Token = existedUser.Token;
+                        response.Success = true;
+                    }
+                    else
+                    {
+                        response.Message = "User not found";
+                    }
+                }
+                else
+                {
+                    response.Message = "Context or user repository is null";
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, log, or rethrow
+                response.Message = $"An error occurred while updating the entity: {ex.Message}";
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// SearchUser
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<UserSearchResponse> SearchUser(UserSearchRequest request)
+        {
+            UserSearchResponse response = new();
+
+            try
+            {
+                using (AdvanceCsharpContext context = new())
+                {
+                    IQueryable<User> query = context.Users ?? Enumerable.Empty<User>().AsQueryable();
+
+                    if (query == null)
+                    {
+                        response.Message = "Error: Query is null.";
+                        return response;
+                    }
+
+                    if (!string.IsNullOrEmpty(email))
+                    {
+                        query = query.Where(a => a.Email.Contains(email));
+                    }
+
+                    var matchingUsers = await query.Select(a => new UserResponse
+                    {
+                        Id = a.Id,
+                        LastName = a.LastName,
+                        FirstName = a.FirstName,
+                        Email = a.Email,
+                        PhoneNumber = a.PhoneNumber,
+                        Address = a.Address,
+                        CreatedAt = a.CreatedAt,
+                        Token = a.Token,
+                    }).ToListAsync();
+
+                    if (matchingUsers.Any())
+                    {
+                        response.Data.AddRange(matchingUsers);
+                    }
+                    else
+                    {
+                        response.Message = "No matching entities found.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, log, or rethrow
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+        }
+
     }
 }

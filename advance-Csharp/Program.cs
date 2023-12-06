@@ -1,3 +1,4 @@
+using advance_Csharp.Service.Authorization;
 using log4net.Config;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -21,9 +23,16 @@ if (app.Environment.IsDevelopment())
     _ = app.UseSwaggerUI();
 }
 
+// custom jwt auth middleware
+app.UseMiddleware<JwtMiddleware>();
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllers();
 

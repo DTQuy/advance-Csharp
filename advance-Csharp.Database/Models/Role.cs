@@ -7,21 +7,12 @@ namespace advance_Csharp.Database.Models
     /// Role
     /// </summary>
     [Table("role")]
-    public class Role
+    public class Role : BaseEntity
     {
         /// <summary>
-        /// Id Role
-        /// </summary>
-        [Key]
-        public Guid IdRole { get; set; }
-        /// <summary>
-        /// User id
-        /// </summary>
-        public Guid IdUser { get; set; }
-
-        /// <summary>
-        /// role name
+        /// Role Name
         /// </summary>
         public string RoleName { get; set; } = string.Empty;
+
     }
 }

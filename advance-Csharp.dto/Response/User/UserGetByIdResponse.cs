@@ -1,6 +1,6 @@
 ﻿namespace advance_Csharp.dto.Response.User
 {
-    public class UserCreateResponse : UserResponse
+    public class UserGetByIdResponse
     {
         /// <summary>
         /// Message
@@ -8,9 +8,8 @@
         public string Message { get; set; } = string.Empty;
 
         /// <summary>
-        /// userResponse
+        /// Data User Response
         /// </summary>
-        public UserResponse? UserResponse { get; set; }
-
+        public UserResponse Data { get; set; } = new UserResponse();
     }
 }

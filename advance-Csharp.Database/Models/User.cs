@@ -38,5 +38,10 @@ namespace advance_Csharp.Database.Models
         /// </summary>
         public string Address { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Token
+        /// </summary>
+        public string Token { get; set; } = string.Empty;
+
     }
 }

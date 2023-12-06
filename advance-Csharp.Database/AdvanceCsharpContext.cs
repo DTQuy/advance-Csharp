@@ -25,6 +25,13 @@ namespace advance_Csharp.Database
         /// </summary>
         public DbSet<Role>? Roles { get; set; }
 
+        public DbSet<UserRole>? UserRoles { get; set; }
+
+        public Task<int> SaveChangesAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Connectionstring
         /// </summary>
@@ -34,6 +41,12 @@ namespace advance_Csharp.Database
             optionsBuilder
                 .UseLazyLoadingProxies()
                 .UseSqlServer("Server=sql.bsite.net\\MSSQL2016;Database=dangthanhquy2303_AdvanceCsharp;User Id=dangthanhquy2303_AdvanceCsharp;Password=Thanhquy12345@;Trusted_Connection=False;");
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            _ = modelBuilder.Entity<UserRole>()
+                .HasKey(e => new { e.UserId, e.RoleId });
+
         }
     }
 }
