@@ -9,25 +9,29 @@ namespace advance_Csharp.Service.Service
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IUserService? userService;
-        private readonly IUserRoleService? userRoleService;
-        private readonly IRoleService? roleService;
-        private readonly IJwtService? jwtUtils;
+        private readonly IUserService userService;
+        private readonly IJwtService jwtUtils;
 
-        public AuthenticationService(IUserService userService, IJwtService jwtUtils, IUserRoleService userRoleService, IRoleService roleService)
+        /// <summary>
+        /// Authentication Service
+        /// </summary>
+        /// <param name="userService"></param>
+        /// <param name="jwtUtils"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public AuthenticationService(IUserService userService, IJwtService jwtUtils)
         {
-
-
-            this.userService = userService;
-            this.jwtUtils = jwtUtils;
-            this.userRoleService = userRoleService;
-            this.roleService = roleService;
-
+            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            this.jwtUtils = jwtUtils ?? throw new ArgumentNullException(nameof(jwtUtils));
         }
 
+        /// <summary>
+        /// AccountAuthentication
+        /// </summary>
+        /// <param name="Request"></param>
+        /// <returns></returns>
         public async Task<AuthenticationLoginResponse> AccountAuthentication(AuthenticationLoginRequest Request)
         {
-            AuthenticationLoginResponse response = new AuthenticationLoginResponse();
+            AuthenticationLoginResponse response = new();
 
             try
             {
@@ -39,7 +43,7 @@ namespace advance_Csharp.Service.Service
                 }
 
                 // Attempt to find the user by email
-                UserSearchRequest userSearchRequest = new UserSearchRequest
+                UserSearchRequest userSearchRequest = new()
                 {
                     Email = Request.Email,
                 };

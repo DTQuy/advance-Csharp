@@ -17,10 +17,10 @@ namespace advance_Csharp.Controllers
         private readonly IApplicationService _applicationService;
         private readonly ILoggingService _loggingService;
 
-        public ApplicationController()
+        public ApplicationController(IApplicationService applicationService, ILoggingService loggingService)
         {
-            _applicationService = new ApplicationService();
-            _loggingService = new LoggingService();
+            _applicationService = applicationService ?? throw new ArgumentNullException(nameof(applicationService));
+            _loggingService = loggingService ?? throw new ArgumentNullException(nameof(loggingService));
         }
 
         /// <summary>

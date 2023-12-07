@@ -1,60 +1,101 @@
-﻿using advance_Csharp.Database.Models;
+﻿using System;
+using System.Threading.Tasks;
+using advance_Csharp.Database;
+using advance_Csharp.Database.Models;
 using advance_Csharp.dto.Request.UserRole;
 using advance_Csharp.dto.Response.UserRole;
 using advance_Csharp.Service.Interface;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace advance_Csharp.Service.Service
 {
     public class UserRoleService : IUserRoleService
     {
-        // Inject dependencies through constructor
-        private readonly IUserService userService; // Replace with your actual repository
-        private readonly IUserRoleService userRoleService; // Replace with your actual repository
+        private readonly IUnitWork unitWork;
+        private readonly string email;
+        private readonly AdvanceCsharpContext context;
 
-        public UserRoleService(IUserService userRepository, IUserRoleService roleRepository)
+        public UserRoleService(IUnitWork unitWork, IHttpContextAccessor httpContextAccessor, AdvanceCsharpContext context)
         {
-            userService = userRepository;
-            userRoleService = roleRepository;
+            this.unitWork = unitWork;
+            this.email = httpContextAccessor.HttpContext?.User?.Identity?.Name ?? "System";
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<UserRoleCreateResponse> AddUserRole(UserRoleCreateRequest request)
         {
-            UserRoleCreateResponse response = new UserRoleCreateResponse();
+            UserRoleCreateResponse response = new();
 
             try
             {
-                // Assuming you have methods in your repository to add a user role
-                bool roleAdded = await userService.AddUserRole(request.UserId, request.RoleId);
-
-                if (roleAdded)
+                // Ensure that context and context.UserRoles are not null
+                if (context != null && context.UserRoles != null)
                 {
-                    // If the role is added successfully, you can retrieve the updated user role information
-                    UserRoleCreateResponse updatedUserRole = await GetUserRoleByIdAsync(request.UserId, request.RoleId);
+                    UserRoleGetByIdRequest userRoleGetByIdRequest = new()
+                    {
+                        RoleId = request.RoleId,
+                        UserId = request.UserId
+                    };
 
-                    // Set the response with the updated user role information
-                    response.UserResponse = updatedUserRole.UserResponse;
-                    response.Message = "User role added successfully";
+                    UserRoleGetByIdResponse userRoleGetByIdResponse = await GetUserRoleById(userRoleGetByIdRequest);
+
+                    // Check if the role already exists for the user
+                    if (userRoleGetByIdResponse != null)
+                    {
+                        response.Message = $"User already has the role";
+                    }
+                    else
+                    {
+                        UserRole newUserRole = new()
+                        {
+                            UserId = request.UserId,
+                            RoleId = request.RoleId
+                        };
+
+                        // Add the role to the user
+                        var entry = await context.UserRoles.AddAsync(newUserRole);
+
+                        if (entry != null && entry.State == EntityState.Added)
+                        {
+                            // Entry is not null, and the entity is added successfully
+                            bool addResult = await unitWork.CompleteAsync(email);
+
+                            if (addResult)
+                            {
+                                // Role added successfully
+                                response.Message = $"Role added to the user successfully.";
+                            }
+                            else
+                            {
+                                response.Message = "Failed to add role. Please try again later.";
+                            }
+                        }
+                        else
+                        {
+                            response.Message = "Failed to add role. Please try again later.";
+                        }
+                    }
                 }
                 else
                 {
-                    // Handle the case where the role addition fails
-                    response.Message = "Failed to add user role";
+                    response.Message = "Error: context or context.UserRoles is null.";
                 }
             }
             catch (Exception ex)
             {
-                // Handle exceptions, log, or rethrow
+                // Log the exception here
                 response.Message = $"An error occurred while adding user role: {ex.Message}";
             }
 
             return response;
         }
 
-        private async Task<UserRoleCreateResponse> GetUserRoleByIdAsync(Guid userId, Guid roleId)
+
+        public Task<UserRoleGetByIdResponse> GetUserRoleById(UserRoleGetByIdRequest request)
         {
-            // Assuming you have methods in your repository to get user role information by user ID and role ID
-            UserRoleCreateResponse userRoleResponse = await _userRepository.GetUserRoleById(userId, roleId);
-            return userRoleResponse;
+            throw new NotImplementedException();
         }
     }
 }

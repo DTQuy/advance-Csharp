@@ -19,11 +19,10 @@ namespace advance_Csharp.Controllers
         /// <summary>
         /// User Controller
         /// </summary>
-        public UserController()
+        public UserController(IUserService userService)
         {
-            _userService = new UserService();
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
-
         /// <summary>
         /// get-user-admin
         /// </summary>

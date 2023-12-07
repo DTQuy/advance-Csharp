@@ -18,11 +18,10 @@ namespace advance_Csharp.Controllers
         /// <summary>
         /// Product Controller
         /// </summary>
-        public ProductController()
+        public ProductController(IProductService productService)
         {
-            _productService = new ProductService();
+            _productService = productService ?? throw new ArgumentNullException(nameof(productService));
         }
-
         /// <summary>
         /// get-product-user
         /// </summary>

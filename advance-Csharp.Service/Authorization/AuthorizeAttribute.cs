@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Authorization;
 using advance_Csharp.Database.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace advance_Csharp.Service.Authorization
 {
-    public class AuthorizeAttribute : ActionFilterAttribute, IAuthorizationFilter
+    public class CustomAuthorizeAttribute : ActionFilterAttribute, IAuthorizationFilter
     {
         public string RoleName { get; set; }
 
-        public AuthorizeAttribute(string roleName)
+        public CustomAuthorizeAttribute(string roleName)
         {
             RoleName = roleName;
         }
@@ -30,6 +30,7 @@ namespace advance_Csharp.Service.Authorization
             {
                 if (RoleName == "Admin")
                 {
+                    // Check other conditions or logic if needed
                     return;
                 }
 

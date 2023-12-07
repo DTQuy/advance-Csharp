@@ -36,17 +36,18 @@ namespace advance_Csharp.Database
         /// Connectionstring
         /// </summary>
         /// <param name="optionsBuilder"></param>
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public AdvanceCsharpContext(DbContextOptions<AdvanceCsharpContext> options) : base(options)
         {
-            optionsBuilder
-                .UseLazyLoadingProxies()
-                .UseSqlServer("Server=sql.bsite.net\\MSSQL2016;Database=dangthanhquy2303_AdvanceCsharp;User Id=dangthanhquy2303_AdvanceCsharp;Password=Thanhquy12345@;Trusted_Connection=False;");
         }
+
+        /// <summary>
+        /// OnModelCreating
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             _ = modelBuilder.Entity<UserRole>()
                 .HasKey(e => new { e.UserId, e.RoleId });
-
-        }
+        }      
     }
 }

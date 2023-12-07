@@ -17,6 +17,17 @@ namespace advance_Csharp.Service.Service
 {
     public class RoleService : IRoleService
     {
+        private readonly AdvanceCsharpContext _context;
+
+        /// <summary>
+        /// RoleService
+        /// </summary>
+        /// <param name="context"></param>
+        public RoleService(AdvanceCsharpContext context)
+        {
+            _context = context;
+        }
+
         /// <summary>
         /// Search Role
         /// </summary>
@@ -27,8 +38,7 @@ namespace advance_Csharp.Service.Service
             RoleSearchResponse roleSearchResponse = new();
             try
             {
-                using AdvanceCsharpContext context = new();
-                IQueryable<Role> query = context.Roles != null ? context.Roles.AsQueryable() : Enumerable.Empty<Role>().AsQueryable();
+                IQueryable<Role> query = _context.Roles != null ? _context.Roles.AsQueryable() : Enumerable.Empty<Role>().AsQueryable();
 
                 if (!string.IsNullOrEmpty(request.RoleName))
                 {
@@ -48,7 +58,6 @@ namespace advance_Csharp.Service.Service
 
             return roleSearchResponse;
         }
-
-
     }
+
 }

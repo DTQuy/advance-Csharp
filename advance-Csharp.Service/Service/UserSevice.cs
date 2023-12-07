@@ -13,10 +13,12 @@ namespace advance_Csharp.Service.Service
     public class UserService : IUserService
     {
         private readonly string email;
+        private readonly DbContextOptions<AdvanceCsharpContext> dbContextOptions;
 
-        public UserService(AdvanceCsharpContext context, IUnitWork unitWork, IHttpContextAccessor httpContextAccessor)
+        public UserService(IHttpContextAccessor httpContextAccessor, DbContextOptions<AdvanceCsharpContext> dbContextOptions)
         {
-            email = httpContextAccessor.HttpContext?.User?.Identity?.Name ?? "System";
+            this.email = httpContextAccessor.HttpContext?.User?.Identity?.Name ?? "System";
+            this.dbContextOptions = dbContextOptions;
         }
 
         /// <summary>
@@ -31,7 +33,7 @@ namespace advance_Csharp.Service.Service
                 PageSize = request.PageSize,
                 PageIndex = request.PageIndex
             };
-            using (AdvanceCsharpContext context = new())
+            using (AdvanceCsharpContext context = new(dbContextOptions))
             {
                 IQueryable<User> query = context.Users ?? Enumerable.Empty<User>().AsQueryable();
                 if (query == null)
@@ -86,7 +88,7 @@ namespace advance_Csharp.Service.Service
 
             try
             {
-                using AdvanceCsharpContext context = new();
+                using AdvanceCsharpContext context = new(dbContextOptions);
                 // Check if context.Users is null
                 if (context.Users == null)
                 {
@@ -151,7 +153,7 @@ namespace advance_Csharp.Service.Service
                     
                 };
 
-                using (AdvanceCsharpContext context = new())
+                using (AdvanceCsharpContext context = new(dbContextOptions))
                 {
                     if (context.Users != null)
                     {
@@ -207,7 +209,7 @@ namespace advance_Csharp.Service.Service
                     };
                 }
 
-                using AdvanceCsharpContext context = new();
+                using AdvanceCsharpContext context = new(dbContextOptions);
                 // Check if context.User is null
                 if (context.Users == null)
                 {
@@ -300,7 +302,7 @@ namespace advance_Csharp.Service.Service
         {
             try
             {
-                using AdvanceCsharpContext context = new();
+                using AdvanceCsharpContext context = new(dbContextOptions);
                 // Check if context.User is null
                 if (context.Users == null)
                 {
@@ -358,7 +360,7 @@ namespace advance_Csharp.Service.Service
         public async Task<UserGenerateTokenResponse> GenerateToken(UserGenerateTokenRequest request)
         {
             UserGenerateTokenResponse response = new();
-            using AdvanceCsharpContext context = new();
+            using AdvanceCsharpContext context = new(dbContextOptions);
             try
             {
                 if (context != null && context.Users != null)
@@ -411,41 +413,39 @@ namespace advance_Csharp.Service.Service
 
             try
             {
-                using (AdvanceCsharpContext context = new())
+                using AdvanceCsharpContext context = new(dbContextOptions);
+                IQueryable<User> query = context.Users ?? Enumerable.Empty<User>().AsQueryable();
+
+                if (query == null)
                 {
-                    IQueryable<User> query = context.Users ?? Enumerable.Empty<User>().AsQueryable();
+                    response.Message = "Error: Query is null.";
+                    return response;
+                }
 
-                    if (query == null)
-                    {
-                        response.Message = "Error: Query is null.";
-                        return response;
-                    }
+                if (!string.IsNullOrEmpty(email))
+                {
+                    query = query.Where(a => a.Email.Contains(email));
+                }
 
-                    if (!string.IsNullOrEmpty(email))
-                    {
-                        query = query.Where(a => a.Email.Contains(email));
-                    }
+                var matchingUsers = await query.Select(a => new UserResponse
+                {
+                    Id = a.Id,
+                    LastName = a.LastName,
+                    FirstName = a.FirstName,
+                    Email = a.Email,
+                    PhoneNumber = a.PhoneNumber,
+                    Address = a.Address,
+                    CreatedAt = a.CreatedAt,
+                    Token = a.Token,
+                }).ToListAsync();
 
-                    var matchingUsers = await query.Select(a => new UserResponse
-                    {
-                        Id = a.Id,
-                        LastName = a.LastName,
-                        FirstName = a.FirstName,
-                        Email = a.Email,
-                        PhoneNumber = a.PhoneNumber,
-                        Address = a.Address,
-                        CreatedAt = a.CreatedAt,
-                        Token = a.Token,
-                    }).ToListAsync();
-
-                    if (matchingUsers.Any())
-                    {
-                        response.Data.AddRange(matchingUsers);
-                    }
-                    else
-                    {
-                        response.Message = "No matching entities found.";
-                    }
+                if (matchingUsers.Any())
+                {
+                    response.Data.AddRange(matchingUsers);
+                }
+                else
+                {
+                    response.Message = "No matching entities found.";
                 }
             }
             catch (Exception ex)

@@ -3,12 +3,21 @@ using advance_Csharp.Database.Models;
 using advance_Csharp.dto.Request.Product;
 using advance_Csharp.dto.Response.Product;
 using advance_Csharp.Service.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace advance_Csharp.Service.Service
 {
     public class ProductService : IProductService
     {
+        
+        private readonly DbContextOptions<AdvanceCsharpContext> dbContextOptions; // Add this field
+
+        public ProductService(DbContextOptions<AdvanceCsharpContext> dbContextOptions)
+        {      
+            this.dbContextOptions = dbContextOptions;
+        }
+
         /// <summary>
         /// ProductGetListResponse
         /// </summary>
@@ -22,7 +31,7 @@ namespace advance_Csharp.Service.Service
                 PageIndex = request.PageIndex
             };
 
-            using (AdvanceCsharpContext context = new())
+            using (AdvanceCsharpContext context = new(dbContextOptions))
             {
                 IQueryable<Product> query = context.Products ?? Enumerable.Empty<Product>().AsQueryable();
                 if (query == null)
@@ -98,7 +107,7 @@ namespace advance_Csharp.Service.Service
                     Category = request.Category
                 };
 
-                using (AdvanceCsharpContext context = new())
+                using (AdvanceCsharpContext context = new(dbContextOptions))
                 {
                     if (context.Products != null)
                     {
@@ -153,7 +162,7 @@ namespace advance_Csharp.Service.Service
                     };
                 }
 
-                using AdvanceCsharpContext context = new();
+                using AdvanceCsharpContext context = new(dbContextOptions);
                 // Check if context.Products is null
                 if (context.Products == null)
                 {
@@ -242,7 +251,7 @@ namespace advance_Csharp.Service.Service
         {
             try
             {
-                using AdvanceCsharpContext context = new();
+                using AdvanceCsharpContext context = new(dbContextOptions);
                 // Check if context.Products is null
                 if (context.Products == null)
                 {
@@ -287,6 +296,12 @@ namespace advance_Csharp.Service.Service
             }
         }
 
+        /// <summary>
+        /// DeleteProduct
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task<ProductDeleteResponse> DeleteProduct(ProductDeleteRequest request)
         {
             throw new NotImplementedException();

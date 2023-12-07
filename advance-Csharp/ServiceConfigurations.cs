@@ -1,9 +1,9 @@
 ﻿using advance_Csharp.Database;
 using advance_Csharp.Service.Interface;
 using advance_Csharp.Service.Service;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 namespace advance_Csharp
 {
@@ -15,33 +15,43 @@ namespace advance_Csharp
             _ = services.AddScoped<IProductService, ProductService>();
             _ = services.AddScoped<IAuthenticationService, AuthenticationService>();
             _ = services.AddScoped<IApplicationService, ApplicationService>();
-            _ = services.AddScoped<IUserService, UserService>();
+            _ = services.AddScoped<IUserService>(provider =>
+            {               
+                return new UserService(
+                    provider.GetRequiredService<IHttpContextAccessor>(),
+                    provider.GetRequiredService<DbContextOptions<AdvanceCsharpContext>>()
+                );
+            });
             _ = services.AddScoped<IRoleService, RoleService>();
             _ = services.AddScoped<IJwtService, JwtService>();
-
-
-
         }
 
         public static void ConfigureCors(this IServiceCollection services)
         {
-            _ = services.AddCors(options =>
+            services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>
-                builder.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
-
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                );
             });
         }
 
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
         {
+            if (configuration == null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
+            }
 
             string connectionString = configuration.GetConnectionString("DefaultConnection");
 
             _ = services.AddDbContext<AdvanceCsharpContext>(opts =>
-                    opts.UseSqlServer(connectionString));
+           opts.UseSqlServer(connectionString));
         }
+
+
     }
 }

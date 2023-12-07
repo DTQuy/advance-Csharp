@@ -8,6 +8,6 @@ namespace advance_Csharp.Service.Interface
     {
         Task<UserRoleCreateResponse> AddUserRole(UserRoleCreateRequest request);
 
-        Task<UserRoleGetByIdResponse> UserRoleGetById(UserRoleGetByIdRequest request);
+        Task<UserRoleGetByIdResponse> GetUserRoleById(UserRoleGetByIdRequest request);
     }
 }

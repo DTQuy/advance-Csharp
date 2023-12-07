@@ -3,12 +3,21 @@ using advance_Csharp.Database.Models;
 using advance_Csharp.dto.Request.AppVersion;
 using advance_Csharp.dto.Response.AppVersion;
 using advance_Csharp.Service.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace advance_Csharp.Service.Service
 {
     public class ApplicationService : IApplicationService
     {
+        private readonly DbContextOptions<AdvanceCsharpContext> dbContextOptions;
+
+        public ApplicationService(DbContextOptions<AdvanceCsharpContext> dbContextOptions)
+        {
+            
+            this.dbContextOptions = dbContextOptions;
+        }
+
         /// <summary>
         /// AppVersionGetListResponse
         /// </summary>
@@ -21,7 +30,7 @@ namespace advance_Csharp.Service.Service
                 PageSize = request.PageSize,
                 PageIndex = request.PageIndex
             };
-            using (AdvanceCsharpContext context = new())
+            using (AdvanceCsharpContext context = new(dbContextOptions))
             {
                 if (context.AppVersions != null)
                 {

@@ -17,5 +17,6 @@ namespace advance_Csharp.dto.Response.Authentication
         /// Token
         /// </summary>
         public string Token { get; set; } = string.Empty;
+        public bool Success { get; set; }
     }
 }

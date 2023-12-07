@@ -13,13 +13,11 @@ namespace advance_Csharp.Service.Service
 {
     public class JwtService : IJwtService
     {
-        private readonly AppSetting _appSetting;
-        private readonly IUserService _userService;
+        private readonly AppSetting appSetting;
 
-        public JwtService(IOptions<AppSetting> appSettings, IUserService userService)
+        public JwtService(IOptions<AppSetting> appSettings)
         {
-            _appSetting = appSettings.Value;
-            _userService = userService;
+            this.appSetting = appSettings.Value;
         }
 
         /// <summary>
@@ -33,9 +31,9 @@ namespace advance_Csharp.Service.Service
             {
                 JwtSecurityTokenHandler tokenHandler = new();
 
-                byte[] key = Encoding.ASCII.GetBytes(_appSetting.Secret);
+                byte[] key = Encoding.ASCII.GetBytes(this.appSetting.Secret);
 
-                SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+                SecurityTokenDescriptor tokenDescriptor = new()
                 {
                     Subject = new ClaimsIdentity(new[] { new Claim("id", userResponse.Id.ToString()) }),
                     Expires = DateTime.UtcNow.AddMinutes(15),
@@ -62,7 +60,7 @@ namespace advance_Csharp.Service.Service
 
             JwtSecurityTokenHandler tokenHandler = new();
 
-            byte[] key = Encoding.ASCII.GetBytes(_appSetting.Secret);
+            byte[] key = Encoding.ASCII.GetBytes(this.appSetting.Secret);
 
             try
             {
