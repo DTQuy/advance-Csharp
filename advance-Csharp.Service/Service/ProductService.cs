@@ -3,18 +3,17 @@ using advance_Csharp.Database.Models;
 using advance_Csharp.dto.Request.Product;
 using advance_Csharp.dto.Response.Product;
 using advance_Csharp.Service.Interface;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace advance_Csharp.Service.Service
 {
     public class ProductService : IProductService
     {
-        
+
         private readonly DbContextOptions<AdvanceCsharpContext> dbContextOptions; // Add this field
 
         public ProductService(DbContextOptions<AdvanceCsharpContext> dbContextOptions)
-        {      
+        {
             this.dbContextOptions = dbContextOptions;
         }
 
@@ -306,6 +305,78 @@ namespace advance_Csharp.Service.Service
         {
             throw new NotImplementedException();
         }
-    }
 
+        /// <summary>
+        /// Get product by ID
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        /// <summary>
+        /// Get product by ID
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public async Task<Product> GetProductById(Guid productId)
+        {
+            try
+            {
+                using AdvanceCsharpContext context = new(dbContextOptions);
+                if (context.Products == null)
+                {
+                    // Handle the case where context.Products is null
+                    throw new InvalidOperationException("Context.Products is null");
+                }
+
+                // Retrieve the product by ID
+                Product? product = await context.Products.FindAsync(productId);
+
+                // Check if the product is null
+                if (product != null)
+                {
+                    return product;
+                }
+
+                // Throw an exception indicating that the product is not found
+                throw new KeyNotFoundException($"Product with ID {productId} not found");
+            }
+            catch (Exception ex)
+            {
+                // Log errors or send errors to a logging service
+                Console.WriteLine($"Error while getting product by ID {productId}: {ex.Message}");
+                throw; // Re-throw the exception to propagate it up the call stack
+            }
+        }
+
+        public async Task<string> GetProductPriceById(Guid productId)
+        {
+            try
+            {
+                using AdvanceCsharpContext context = new(dbContextOptions);
+                if (context.Products == null)
+                {
+                    // Handle the case where context.Products is null
+                    throw new InvalidOperationException("Context.Products is null");
+                }
+
+                // Retrieve the product by ID
+                Product? product = await context.Products.FindAsync(productId);
+
+                // Check if the product is null
+                if (product != null)
+                {
+                    // Return the product price
+                    return product.Price;
+                }
+
+                // Throw an exception indicating that the product is not found
+                throw new KeyNotFoundException($"Product with ID {productId} not found");
+            }
+            catch (Exception ex)
+            {
+                // Log errors or send errors to a logging service
+                Console.WriteLine($"Error while getting product price by ID {productId}: {ex.Message}");
+                throw; // Re-throw the exception to propagate it up the call stack
+            }
+        }
+    }
 }

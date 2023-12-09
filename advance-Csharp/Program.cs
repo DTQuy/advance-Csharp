@@ -2,7 +2,6 @@ using advance_Csharp;
 using advance_Csharp.Database;
 using advance_Csharp.Service.Authorization;
 using advance_Csharp.Service.Seeding;
-using log4net.Config;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -15,13 +14,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication();
 // Add log4net
-XmlConfigurator.Configure(new FileInfo("log4net.config"));
-
+/*XmlConfigurator.Configure(new FileInfo("log4net.config"));
+*/
 
 // configure strongly typed settings object
 builder.Services.ConfigureCors();
-builder.Services.ConfigureServiceManager();
+
 builder.Services.ConfigureSqlContext(builder.Configuration);
+builder.Services.ConfigureServiceManager();
+
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 
 
@@ -46,11 +47,12 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
+
 app.UseStaticFiles();
 
 // custom jwt auth middleware
-app.UseMiddleware<JwtMiddleware>();
-
+/*app.UseMiddleware<JwtMiddleware>();
+*/
 app.UseAuthentication();
 
 app.UseAuthorization();

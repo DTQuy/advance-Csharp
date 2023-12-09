@@ -1,4 +1,5 @@
-﻿using advance_Csharp.dto.Request.Product;
+﻿using advance_Csharp.Database.Models;
+using advance_Csharp.dto.Request.Product;
 using advance_Csharp.dto.Response.Product;
 
 namespace advance_Csharp.Service.Interface
@@ -33,6 +34,25 @@ namespace advance_Csharp.Service.Interface
         /// <returns></returns>
         Task<ProductDeleteResponse> DeleteProduct(ProductDeleteRequest request);
 
+        /// <summary>
+        /// DeleteProduct by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<ProductDeleteResponse> DeleteProduct(Guid id);
+
+        /// <summary>
+        /// GetProductById
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        Task<Product> GetProductById(Guid productId);
+
+        /// <summary>
+        /// GetProductPriceById
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        Task<string> GetProductPriceById(Guid productId);
     }
 }

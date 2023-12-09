@@ -7,24 +7,21 @@ namespace advance_Csharp.Service.Authorization
 {
     public class JwtMiddleware
     {
-        private readonly RequestDelegate _next;
-        private readonly IUserService _userService;
-        private readonly IJwtService _jwtService;
+        private readonly RequestDelegate next;
 
-        public JwtMiddleware(RequestDelegate next, IUserService userService, IJwtService jwtService)
+        public JwtMiddleware(RequestDelegate next)
         {
-            _next = next ?? throw new ArgumentNullException(nameof(next));
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
+            this.next = next;
+
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, IUserService userService, IJwtService jwtService)
         {
             string? token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").LastOrDefault();
 
             if (!string.IsNullOrEmpty(token))
             {
-                Guid? userId = _jwtService.ValidateAccessToken(token);
+                Guid? userId = jwtService.ValidateAccessToken(token);
                 if (userId.HasValue)
                 {
                     UserGetByIdRequest userGetByIdRequest = new()
@@ -33,15 +30,15 @@ namespace advance_Csharp.Service.Authorization
                     };
 
                     // Attach user to context on successful JWT validation
-                    UserGetByIdResponse userGetByIdResponse = await _userService.GetUserById(userGetByIdRequest);
+                    UserGetByIdResponse userGetByIdResponse = await userService.GetUserById(userGetByIdRequest);
                     if (userGetByIdResponse != null)
                     {
-                        context.Items["User"] = userGetByIdResponse.Data; // Assuming 'Data' property contains user information
+                        context.Items["User"] = userGetByIdResponse.Data;
                     }
                 }
             }
 
-            await _next(context);
+            await next(context);
         }
     }
 }

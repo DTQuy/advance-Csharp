@@ -1,6 +1,4 @@
-﻿using advance_Csharp.dto.Response.User;
-
-namespace advance_Csharp.dto.Response.Role
+﻿namespace advance_Csharp.dto.Response.Role
 {
     public class RoleSearchResponse
     {
@@ -12,6 +10,7 @@ namespace advance_Csharp.dto.Response.Role
         /// <summary>
         /// role Response
         /// </summary>
+        public Guid RoleId { get; set; }
         public List<RoleResponse> Data { get; set; } = new List<RoleResponse>();
     }
 }

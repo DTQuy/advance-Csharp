@@ -3,11 +3,9 @@ using advance_Csharp.Service.Authorization;
 using advance_Csharp.Service.Interface;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace advance_Csharp.Service.Service
 {
@@ -17,7 +15,7 @@ namespace advance_Csharp.Service.Service
 
         public JwtService(IOptions<AppSetting> appSettings)
         {
-            this.appSetting = appSettings.Value;
+            appSetting = appSettings.Value;
         }
 
         /// <summary>
@@ -31,7 +29,7 @@ namespace advance_Csharp.Service.Service
             {
                 JwtSecurityTokenHandler tokenHandler = new();
 
-                byte[] key = Encoding.ASCII.GetBytes(this.appSetting.Secret);
+                byte[] key = Encoding.ASCII.GetBytes(appSetting.Secret);
 
                 SecurityTokenDescriptor tokenDescriptor = new()
                 {
@@ -60,11 +58,11 @@ namespace advance_Csharp.Service.Service
 
             JwtSecurityTokenHandler tokenHandler = new();
 
-            byte[] key = Encoding.ASCII.GetBytes(this.appSetting.Secret);
+            byte[] key = Encoding.ASCII.GetBytes(appSetting.Secret);
 
             try
             {
-                tokenHandler.ValidateToken(accessToken, new TokenValidationParameters
+                _ = tokenHandler.ValidateToken(accessToken, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
