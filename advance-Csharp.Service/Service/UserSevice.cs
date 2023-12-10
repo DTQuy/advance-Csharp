@@ -157,9 +157,21 @@ namespace advance_Csharp.Service.Service
 
                 using (AdvanceCsharpContext context = new(dbContextOptions))
                 {
+                    // Check if the Users table is not null
                     if (context.Users != null)
                     {
                         _ = context.Users.Add(newUser);
+                        _ = await context.SaveChangesAsync();
+
+                        // Create a new cart for the user (without cart details initially)
+                        Cart newCart = new()
+                        {
+                            UserId = newUser.Id,
+                            CartDetails = new List<CartDetail>()
+                        };
+
+                        // Add the new cart to the context
+                        _ = context.Carts.Add(newCart);
                         _ = await context.SaveChangesAsync();
                     }
                 }

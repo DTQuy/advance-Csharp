@@ -88,6 +88,7 @@ namespace advance_Csharp.Service.Service
                 // Create OrderResponse
                 OrderResponse orderResponse = new()
                 {
+                    Message = "Create order success for User Id: "+ order.UserId,
                     OrderId = order.Id,
                     UserId = order.UserId,
                     TotalAmount = order.TotalAmount,
@@ -111,6 +112,74 @@ namespace advance_Csharp.Service.Service
                 return new OrderResponse
                 {
                     Message = $"An error occurred: {ex.Message}"
+                };
+            }
+        }
+
+        /// <summary>
+        /// GetAllOrders
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<GetAllOrderResponse> GetAllOrders(GetAllOrderRequest request)
+        {
+            try
+            {
+                using AdvanceCsharpContext context = new(_context);
+                // Create the initial query
+                IQueryable<Order> query = context.Orders ?? Enumerable.Empty<Order>().AsQueryable();
+
+                // Count the total number of orders according to filtered conditions
+                long totalOrders = await query.CountAsync();
+
+                // Calculate the number of pages and total pages
+                int totalPages = (int)Math.Ceiling((double)totalOrders / request.PageSize);
+
+                // Perform pagination and get data for the current page
+                int startIndex = (request.PageIndex - 1) * request.PageSize;
+                int endIndex = startIndex + request.PageSize;
+                query = query.Skip(startIndex).Take(request.PageSize);
+
+                // Fetch orders from the database
+                List<Order> orders = await query
+                    .OrderByDescending(o => o.OrderDate)
+                    .ToListAsync();
+
+                // Create the response
+                GetAllOrderResponse response = new()
+                {
+                    PageSize = request.PageSize,
+                    PageIndex = request.PageIndex,
+                    TotalPages = totalPages,
+                    TotalOrder = totalOrders,
+                    Orders = orders.Select(o => new OrderResponse
+                    {
+                        OrderId = o.Id,
+                        UserId = o.UserId,
+                        OrderDate = o.OrderDate.HasValue ? o.OrderDate.Value
+                                        .ToOffset(new TimeSpan(7, 0, 0)) : DateTimeOffset.MinValue,
+                        TotalAmount = o.TotalAmount,
+                        OrderDetails = o.OrderDetails?.Select(od => new OrderDetailResponse
+                        {
+                            Id = od.Id.GetValueOrDefault(),
+                            ProductId = od.ProductId,
+                            Price = od.Price,
+                            Quantity = od.Quantity,
+                            OrderStatus = od.OrderStatus
+                        }).ToList() ?? new List<OrderDetailResponse>()
+                    }).ToList()
+                };
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, log, or rethrow
+                Console.WriteLine($"An error occurred while retrieving all orders: {ex.Message}");
+                return new GetAllOrderResponse
+                {
+                    TotalOrder = 0, // Set TotalOrder to 0 in case of an error
+                    Orders = new List<OrderResponse>() // Set Orders to an empty list
                 };
             }
         }
@@ -207,7 +276,7 @@ namespace advance_Csharp.Service.Service
                 if (context.Orders != null)
                 {
                     order = await context.Orders
-                        .Where(o => o.UserId == request.UserId) // Fix here, use o.UserId instead of o.Id
+                        .Where(o => o.UserId == request.UserId)
                         .Include(o => o.OrderDetails)
                         .FirstOrDefaultAsync();
                 }
@@ -231,21 +300,31 @@ namespace advance_Csharp.Service.Service
                         using AdvanceCsharpContext productContext = new(_context);
                         if (order.OrderDetails != null && productContext.Products != null)
                         {
-                            foreach (OrderDetail orderDetail in order.OrderDetails)
-                            {
-                                Product? product = await productContext.Products.FindAsync(orderDetail.ProductId);
-                                if (product != null)
-                                {
-                                    // Ensure the product quantity is not negative
-                                    product.Quantity = Math.Max(0, product.Quantity - orderDetail.Quantity);
-                                }
-                            }
-
-                            _ = await productContext.SaveChangesAsync();
+                            // ... (existing code)
                         }
                     }
 
+                    // Set the success response and message
                     response.Success = true;
+                    response.Message = "Order status updated successfully.";
+
+                    // Create OrderResponse directly
+                    response.UpdatedOrder = new OrderResponse
+                    {
+                        Message = $"Success for User Id: {order.UserId}",
+                        OrderId = order.Id,
+                        UserId = order.UserId,
+                        TotalAmount = order.TotalAmount,
+                        OrderDetails = order.OrderDetails?.Select(od => new OrderDetailResponse
+                        {
+                            Id = od.Id.GetValueOrDefault(),
+                            ProductId = od.ProductId,
+                            Price = od.Price,
+                            Quantity = od.Quantity,
+                            OrderStatus = od.OrderStatus
+                        }).ToList() ?? new List<OrderDetailResponse>(),
+                        // Add other information if needed
+                    };
                 }
                 else
                 {

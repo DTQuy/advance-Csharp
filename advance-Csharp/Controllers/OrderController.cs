@@ -16,24 +16,36 @@ namespace advance_Csharp.Controllers
         }
 
         /// <summary>
-        /// create-order
+        /// GetAllOrders
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [Route("/create-order")]
-        [HttpPost()]
-        public async Task<IActionResult> CreateOrder([FromBody] OrderRequest request)
+        [Route("/get-order-all")]
+        [HttpGet()]
+        public async Task<IActionResult> GetAllOrders([FromQuery] GetAllOrderRequest request)
         {
             try
             {
-                OrderResponse orderResponse = await _orderService.CreateOrder(request);
-                return Ok(orderResponse);
+                // Call the service to get all orders
+                GetAllOrderResponse response = await _orderService.GetAllOrders(request);
+
+                // Check if any orders were found
+                if (response.TotalOrder > 0)
+                {
+                    return Ok(response); // 200 OK with the list of orders
+                }
+                else
+                {
+                    return NotFound(new { Message = "No orders found." }); // 404 Not Found
+                }
             }
             catch (Exception ex)
             {
                 // Log the exception
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                return StatusCode(500, "An error occurred while creating the order.");
+                Console.WriteLine($"An error occurred while getting all orders: {ex.Message}");
+
+                // Return a 500 Internal Server Error response
+                return StatusCode(500, new { Message = "An error occurred while processing your request." });
             }
         }
 
@@ -59,6 +71,28 @@ namespace advance_Csharp.Controllers
                 // Log errors or send errors to a logging service
                 Console.WriteLine(ex.Message);
                 return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// create-order
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [Route("/create-order")]
+        [HttpPost()]
+        public async Task<IActionResult> CreateOrder([FromBody] OrderRequest request)
+        {
+            try
+            {
+                OrderResponse orderResponse = await _orderService.CreateOrder(request);
+                return Ok(orderResponse);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return StatusCode(500, "An error occurred while creating the order.");
             }
         }
 

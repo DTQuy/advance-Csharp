@@ -1,6 +1,9 @@
 ﻿using advance_Csharp.dto.Request.Order;
+using advance_Csharp.dto.Request.User;
 using advance_Csharp.dto.Response.Order;
+using advance_Csharp.dto.Response.User;
 using advance_Csharp.Service.Interface;
+using advance_Csharp.Service.Service;
 
 namespace advance_Csharp.Test
 {
@@ -12,6 +15,25 @@ namespace advance_Csharp.Test
         public OrderServiceTest(IOrderService orderService)
         {
             this.orderService = orderService;
+        }
+
+
+        /// <summary>
+        /// GetApplicationUser
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod]
+        public async Task GetApplicationOrderListTestAsync()
+        {
+            GetAllOrderRequest request = new()
+            {
+                PageIndex = 1,
+                PageSize = 10,
+
+            };
+            GetAllOrderResponse response = await orderService.GetAllOrders(request);
+            Assert.IsNotNull(response);
+            Assert.IsTrue(response.Orders.Count > 0);
         }
 
         /// <summary>

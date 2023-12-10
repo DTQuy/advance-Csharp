@@ -20,6 +20,13 @@ namespace advance_Csharp.Service.Interface
         Task<OrderListResponse> GetOrdersByUserId(OrderRequest orderRequest);
 
         /// <summary>
+        /// GetAllOrders
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<GetAllOrderResponse> GetAllOrders(GetAllOrderRequest request);
+
+        /// <summary>
         /// Update Order Status
         /// </summary>
         /// <param name="orderId"></param>
