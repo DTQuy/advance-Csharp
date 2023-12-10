@@ -1,11 +1,6 @@
 ﻿using advance_Csharp.Database;
 using advance_Csharp.Database.Contants;
 using advance_Csharp.Database.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace advance_Csharp.Service.Seeding
 {
@@ -40,7 +35,7 @@ namespace advance_Csharp.Service.Seeding
                         {
                             Id = new Guid(ConstantSystem.AdminRoleId),
                             FirstName = "Quy",
-                            LastName="Đặng",                                         
+                            LastName="Đặng",
                             Email="dquy1514@gmail.com",
                             PhoneNumber="0974322724",
                             Password =passAdminHash

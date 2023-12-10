@@ -6,6 +6,6 @@ namespace advance_Csharp.Service.Interface
     public interface IAuthenticationService
     {
         Task<AuthenticationRegisterResponse> RegisterUser(AuthenticationRegisterRequest Request);
-        Task<AuthenticationLoginResponse> AccountAuthentication(AuthenticationLoginRequest Request);
+        /*Task<AuthenticationLoginResponse> AccountAuthentication(AuthenticationLoginRequest Request);*/
     }
 }

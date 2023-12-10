@@ -16,7 +16,7 @@
         public DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
-        /// IsIsDeleted
+        /// IsDeleted
         /// </summary>
         public bool IsDelete { get; set; }
 

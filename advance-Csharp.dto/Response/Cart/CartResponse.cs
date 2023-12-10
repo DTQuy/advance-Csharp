@@ -22,5 +22,4 @@
         /// </summary>
         public List<CartDetailResponse>? CartDetails { get; set; }
     }
-
 }

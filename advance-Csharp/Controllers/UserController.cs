@@ -1,8 +1,6 @@
 ﻿using advance_Csharp.dto.Request.User;
-using advance_Csharp.dto.Response.Product;
 using advance_Csharp.dto.Response.User;
 using advance_Csharp.Service.Interface;
-using advance_Csharp.Service.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace advance_Csharp.Controllers
@@ -101,11 +99,11 @@ namespace advance_Csharp.Controllers
         [Route("delete-user-admin")]
         [HttpDelete]
         [MyAppAuthentication("Admin")]
-        public async Task<IActionResult> DeleteUser(Guid id)
+        public async Task<IActionResult> DeleteUser(UserDeleteRequest request)
         {
             try
             {
-                UserDeleteResponse response = await _userService.DeleteUser(id);
+                UserDeleteResponse response = await _userService.DeleteUser(request);
 
                 return response.DeletedUser == null ? NotFound(response.Message) : Ok(response);
             }

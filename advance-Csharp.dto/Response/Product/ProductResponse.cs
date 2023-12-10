@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace advance_Csharp.dto.Response.Product
+﻿namespace advance_Csharp.dto.Response.Product
 {
     public class ProductResponse
     {
@@ -40,22 +38,14 @@ namespace advance_Csharp.dto.Response.Product
         /// </summary>
         public DateTimeOffset CreatedAt { get; set; }
 
+        public bool IsDelete { get; set; }
+
         /// <summary>
         /// ProductResponse: CreatedAt = DateTimeOffset.UtcNow;
         /// </summary>
-        public ProductResponse() 
+        public ProductResponse()
         {
             CreatedAt = DateTimeOffset.UtcNow;
         }
-
-        /*// <summary>
-       /// Parse Price from string to decimal
-       /// </summary>
-       [NotMapped]
-       public decimal PriceDecimal
-       {
-           get => decimal.Parse(Price);
-           set => Price = value.ToString();
-       }*/
     }
 }

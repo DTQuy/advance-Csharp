@@ -1,7 +1,12 @@
 ﻿namespace advance_Csharp.dto.Request.Cart
 {
-    public class CartDetailRequest
+    public class UpdateProductQuantityRequest
     {
+        /// <summary>
+        /// UserId
+        /// </summary>
+        public Guid UserId { get; set; }
+
         /// <summary>
         /// ProductId
         /// </summary>
@@ -11,6 +16,5 @@
         /// Quantity
         /// </summary>
         public int Quantity { get; set; }
-
     }
 }

@@ -22,12 +22,12 @@ namespace advance_Csharp.Controllers
         /// <returns></returns>
         [Route("/view-all-cart")]
         [HttpGet()]
-        public async Task<ActionResult<List<CartResponse>>> GetAllCarts()
+        public async Task<IActionResult> GetAllCarts([FromQuery] GetAllCartRequest request)
         {
             try
             {
-                List<CartResponse> carts = await _cartService.GetAllCarts();
-                return Ok(carts);
+                GetAllCartResponse response = await _cartService.GetAllCarts(request);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -44,12 +44,15 @@ namespace advance_Csharp.Controllers
         /// <returns></returns>
         [Route("/view-cart")]
         [HttpGet()]
-        public async Task<IActionResult> ViewCart(Guid userId)
+        public async Task<IActionResult> GetCartByUserId([FromQuery] Guid userId)
         {
             try
             {
-                CartResponse cartResponse = await _cartService.ViewCart(userId);
-                return Ok(cartResponse);
+                GetCartByUserIdRequest request = new() { UserId = userId };
+
+                CartResponse cartResponse = await _cartService.GetCartByUserId(request);
+
+                return cartResponse != null ? Ok(cartResponse) : BadRequest("Failed to get cart for the specified user.");
             }
             catch (Exception ex)
             {
@@ -58,7 +61,6 @@ namespace advance_Csharp.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
         /// <summary>
         /// AddProductToCart
         /// </summary>
@@ -70,14 +72,17 @@ namespace advance_Csharp.Controllers
         {
             try
             {
-                bool result = await _cartService.AddProductToCart(request);
-                return result ? Ok("Product added to the cart successfully.") : BadRequest("Failed to add the product to the cart.");
+                AddProductToCartResponse response = await _cartService.AddProductToCart(request);
+
+                return response.IsSuccess
+                    ? Ok(new { Message = "Product added to the cart successfully.", response.UpdatedCart })
+                    : BadRequest(new { ErrorMessage = "Failed to add the product to the cart.", DetailedError = response.ErrorMessage });
             }
             catch (Exception ex)
             {
                 // Log errors or send errors to a logging service
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, new { ErrorMessage = ex.Message });
             }
         }
 
@@ -89,18 +94,29 @@ namespace advance_Csharp.Controllers
         /// <returns></returns>
         [Route("/delete-product")]
         [HttpDelete()]
-        public async Task<IActionResult> DeleteProductFromCart(Guid userId, Guid productId)
+        public async Task<IActionResult> DeleteProductFromCart([FromBody] DeleteProductFromCartRequest request)
         {
             try
             {
-                bool result = await _cartService.DeleteProductFromCart(userId, productId);
-                return result ? Ok("Product deleted from the cart successfully.") : BadRequest("Failed to delete the product from the cart.");
+                CartResponse result = await _cartService.DeleteProductFromCart(request);
+
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    // Handle the case where the request is invalid or product not found
+                    return NotFound(new { Message = "Invalid request or product not found" });
+                }
             }
             catch (Exception ex)
             {
-                // Log errors or send errors to a logging service
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, ex.Message);
+                // Log the exception
+                Console.WriteLine($"An error occurred: {ex.Message}");
+
+                // Return a 500 Internal Server Error response
+                return StatusCode(500, new { Message = "Internal Server Error" });
             }
         }
 
@@ -113,12 +129,15 @@ namespace advance_Csharp.Controllers
         /// <returns></returns>
         [Route("api/update-quantity")]
         [HttpPut()]
-        public async Task<IActionResult> UpdateQuantity(Guid userId, Guid productId, int quantity)
+        public async Task<IActionResult> UpdateQuantity([FromBody] UpdateProductQuantityRequest request)
         {
             try
             {
-                bool result = await _cartService.UpdateQuantity(userId, productId, quantity);
-                return result ? Ok("Cart quantity updated successfully.") : BadRequest("Failed to update cart quantity.");
+                bool result = await _cartService.UpdateQuantity(request);
+
+                return result
+                    ? Ok("Cart quantity updated successfully.")
+                    : BadRequest("Failed to update cart quantity.");
             }
             catch (Exception ex)
             {
@@ -127,6 +146,7 @@ namespace advance_Csharp.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
     }
 }
 

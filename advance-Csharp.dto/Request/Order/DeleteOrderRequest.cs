@@ -1,11 +1,10 @@
 ﻿namespace advance_Csharp.dto.Request.Order
 {
-    public class OrderRequest
+    public class DeleteOrderRequest
     {
         /// <summary>
-        /// UserId
+        /// OrderId
         /// </summary>
-        public Guid UserId { get; set; }
-
+        public Guid OrderId { get; set; }
     }
 }

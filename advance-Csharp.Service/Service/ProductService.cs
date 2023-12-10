@@ -81,6 +81,7 @@ namespace advance_Csharp.Service.Service
                     Quantity = a.Quantity,
                     Unit = a.Unit,
                     CreatedAt = a.CreatedAt,
+                    IsDelete = a.IsDelete,
                 }).ToListAsync();
             }
 
@@ -124,7 +125,9 @@ namespace advance_Csharp.Service.Service
                     Quantity = newProduct.Quantity,
                     Unit = newProduct.Unit,
                     Images = newProduct.Images,
-                    Category = newProduct.Category
+                    Category = newProduct.Category,
+                    IsDelete = newProduct.IsDelete,
+
                 };
 
                 // create DTO to respons
@@ -193,7 +196,8 @@ namespace advance_Csharp.Service.Service
                     Unit = existingProduct.Unit,
                     Images = existingProduct.Images,
                     Category = existingProduct.Category,
-                    CreatedAt = existingProduct.CreatedAt
+                    CreatedAt = existingProduct.CreatedAt,
+                    IsDelete = existingProduct.IsDelete,
                 };
 
                 // Update product information
@@ -218,6 +222,7 @@ namespace advance_Csharp.Service.Service
                     Images = existingProduct.Images,
                     Category = existingProduct.Category,
                     CreatedAt = existingProduct.CreatedAt
+
                 };
 
                 // Create DTO for response
@@ -275,11 +280,13 @@ namespace advance_Csharp.Service.Service
                     Quantity = existingProduct.Quantity,
                     Unit = existingProduct.Unit ?? string.Empty,
                     Images = existingProduct.Images ?? string.Empty,
-                    Category = existingProduct.Category ?? string.Empty
+                    Category = existingProduct.Category ?? string.Empty,
+                    IsDelete = existingProduct.IsDelete,
                 };
 
-                // Delete product
-                _ = context.Products.Remove(existingProduct);
+                // Remove the Product from the context (soft delete by setting IsDelete to true)
+                deletedProduct.IsDelete = true;
+                _ = context.Products.Update(existingProduct);
 
                 // Save changes to the database
                 _ = await context.SaveChangesAsync();
@@ -293,17 +300,6 @@ namespace advance_Csharp.Service.Service
                 Console.WriteLine(ex.Message);
                 return new ProductDeleteResponse("Error deleting product", new ProductResponse());
             }
-        }
-
-        /// <summary>
-        /// DeleteProduct
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Task<ProductDeleteResponse> DeleteProduct(ProductDeleteRequest request)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -347,6 +343,13 @@ namespace advance_Csharp.Service.Service
             }
         }
 
+        /// <summary>
+        /// GetProductPriceById
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="KeyNotFoundException"></exception>
         public async Task<string> GetProductPriceById(Guid productId)
         {
             try

@@ -44,18 +44,21 @@ namespace advance_Csharp.Controllers
         /// <returns></returns>
         [Route("/get-order-by-UserId")]
         [HttpGet()]
-        public async Task<IActionResult> GetOrdersByUserId(Guid userId)
+        public async Task<IActionResult> GetOrdersByUserId([FromQuery] Guid userId)
         {
             try
             {
-                OrderListResponse orderListResponse = await _orderService.GetOrdersByUserId(userId);
-                return Ok(orderListResponse);
+                OrderRequest orderRequest = new() { UserId = userId };
+
+                OrderListResponse orderListResponse = await _orderService.GetOrdersByUserId(orderRequest);
+
+                return orderListResponse != null ? Ok(orderListResponse) : BadRequest("Failed to get orders for the specified user.");
             }
             catch (Exception ex)
             {
-                // Log the exception
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                return StatusCode(500, "An error occurred while getting orders.");
+                // Log errors or send errors to a logging service
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -67,18 +70,19 @@ namespace advance_Csharp.Controllers
         /// <returns></returns>
         [Route("/update-order-status")]
         [HttpPut()]
-        public async Task<IActionResult> UpdateOrderStatus(Guid userId, [FromBody] bool newStatus)
+        public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusRequest request)
         {
             try
             {
-                bool result = await _orderService.UpdateOrderStatus(userId, newStatus);
-                return result ? Ok("Order status updated successfully.") : NotFound($"Order with UserId {userId} not found.");
+                UpdateOrderStatusResponse response = await _orderService.UpdateOrderStatus(request);
+
+                return response.Success ? Ok("Order status updated successfully.") : BadRequest(response.Message);
             }
             catch (Exception ex)
             {
-                // Log the exception
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                return StatusCode(500, "An error occurred while updating the order status.");
+                // Log errors or send errors to a logging service
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -89,19 +93,20 @@ namespace advance_Csharp.Controllers
         /// <returns></returns>
         [Route("/delete-order")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteOrder(Guid orderId)
+        public async Task<IActionResult> DeleteOrder([FromBody] DeleteOrderRequest request)
         {
             try
             {
-                OrderResponse deletedOrderResponse = await _orderService.DeleteOrder(orderId);
-                return deletedOrderResponse.OrderId != Guid.Empty
-                    ? Ok(deletedOrderResponse)
-                    : NotFound($"Order with OrderId {orderId} not found for deletion.");
+                OrderResponse deletedOrder = await _orderService.DeleteOrder(request);
+
+                return deletedOrder != null && deletedOrder.OrderId != Guid.Empty
+                    ? Ok($"Order with OrderId {request.OrderId} has been successfully deleted.")
+                    : BadRequest($"Order with OrderId {request.OrderId} not found for deletion.");
             }
             catch (Exception ex)
             {
-                // Log the exception
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                // Log errors or send errors to a logging service
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, "An error occurred while deleting the order.");
             }
         }

@@ -32,7 +32,7 @@ namespace advance_Csharp.Controllers
             }
         }
 
-        [HttpPost("authenticate")]
+        /*[HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticationLoginRequest request)
         {
             try
@@ -46,6 +46,6 @@ namespace advance_Csharp.Controllers
                 // Log the exception
                 return StatusCode(500, new { Message = "Internal Server Error" });
             }
-        }
+        }*/
     }
 }

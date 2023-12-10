@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace advance_Csharp.dto.Request.User
+﻿namespace advance_Csharp.dto.Request.User
 {
     public class UserUpdateRequest
     {
@@ -44,7 +37,9 @@ namespace advance_Csharp.dto.Request.User
         /// </summary>
         public string Address { get; set; } = string.Empty;
 
+        /// <summary>
+        /// IsPhoneValid
+        /// </summary>
         public bool IsPhoneValid => decimal.TryParse(PhoneNumber, out _);
     }
-
 }

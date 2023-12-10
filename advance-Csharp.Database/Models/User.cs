@@ -26,7 +26,7 @@ namespace advance_Csharp.Database.Models
         /// <summary>
         /// Password
         /// </summary>
-        public string Password {  get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
 
         /// <summary>
         /// Phone number
@@ -37,11 +37,5 @@ namespace advance_Csharp.Database.Models
         /// Address
         /// </summary>
         public string Address { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Token
-        /// </summary>
-        public string Token { get; set; } = string.Empty;
-
     }
 }

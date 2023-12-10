@@ -1,13 +1,7 @@
-﻿namespace advance_Csharp.dto.Response.User
+﻿namespace advance_Csharp.dto.Response.Cart
 {
-    /// <summary>
-    /// User GetList Response
-    /// </summary>
-    public class UserGetListResponse
+    public class GetAllCartResponse
     {
-        /// <summary>
-        /// Message
-        /// </summary>
         public string Message { get; set; } = string.Empty;
 
         /// <summary>
@@ -25,14 +19,12 @@
         /// </summary>
         public int TotalPages { get; set; }
 
-        /// <summary>
-        /// Total Product
-        /// </summary>
-        public long TotalUser { get; set; }
+        public int TotalCarts { get; set; }
+
 
         /// <summary>
-        /// Data return
+        /// Cart detail
         /// </summary>
-        public List<UserResponse> Data { get; set; } = new List<UserResponse>();
+        public List<CartResponse>? Carts { get; set; }
     }
 }

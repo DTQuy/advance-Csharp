@@ -1,11 +1,10 @@
-﻿namespace advance_Csharp.dto.Request.Order
+﻿namespace advance_Csharp.dto.Request.Cart
 {
-    public class OrderRequest
+    public class CreateCartRequest
     {
         /// <summary>
         /// UserId
         /// </summary>
         public Guid UserId { get; set; }
-
     }
 }

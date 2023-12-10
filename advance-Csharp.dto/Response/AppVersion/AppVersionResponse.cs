@@ -14,5 +14,10 @@
         /// Version
         /// </summary>
         public string Version { get; set; } = string.Empty;
+
+        /// <summary>
+        /// IsDelete
+        /// </summary>
+        public bool IsDelete { get; set; }
     }
 }

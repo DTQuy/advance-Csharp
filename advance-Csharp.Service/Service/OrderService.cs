@@ -26,8 +26,18 @@ namespace advance_Csharp.Service.Service
             {
                 using AdvanceCsharpContext context = new(_context);
 
-                // Fetch cart details based on the provided userId
+                // Fetch cart details based on the provided userId, excluding deleted items
                 List<CartDetail> cartDetails = await FetchCartDetails(request.UserId);
+
+                // Check if all cartDetails have IsDelete set to true
+                if (cartDetails.All(cd => cd.IsDelete))
+                {
+                    // Return an error response indicating there are no products in the cart
+                    return new OrderResponse
+                    {
+                        Message = "There aren't products in the cart"
+                    };
+                }
 
                 // Calculate the total amount from fetched cart details
                 decimal totalAmount = CalculateTotalAmount(cartDetails);
@@ -43,13 +53,37 @@ namespace advance_Csharp.Service.Service
                         ProductId = cartDetail.ProductId,
                         Price = decimal.TryParse(cartDetail.Price, out decimal price) ? price : 0,
                         Quantity = cartDetail.Quantity,
-                        OrderStatus = false // Default order status is false
+                        OrderStatus = false
                     }).ToList() ?? new List<OrderDetail>()
                 };
 
                 // Save the order to the database
                 _ = context.Orders?.Add(order);
                 _ = await context.SaveChangesAsync();
+
+                // Remove cart items after creating the order
+                if (cartDetails != null && cartDetails.Any())
+                {
+                    foreach (CartDetail cartDetail in cartDetails)
+                    {
+                        // Check if cartDetail is not null
+                        if (cartDetail != null)
+                        {
+                            // Set isDelete to true for the cart detail
+                            cartDetail.IsDelete = true;
+
+                            // Update the cart detail in the context
+                            _ = (context.CartDetails?.Update(cartDetail));
+                        }
+                        else
+                        {
+                            // Handle the case where cartDetail is null
+                            Console.WriteLine("Error: cartDetail is null");
+                        }
+                    }
+
+                    _ = await context.SaveChangesAsync();
+                }
 
                 // Create OrderResponse
                 OrderResponse orderResponse = new()
@@ -86,10 +120,17 @@ namespace advance_Csharp.Service.Service
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<OrderListResponse> GetOrdersByUserId(Guid userId)
+        public async Task<OrderListResponse> GetOrdersByUserId(OrderRequest orderRequest)
         {
             try
             {
+                if (orderRequest == null)
+                {
+                    // Handle the case where the request is null
+                    Console.WriteLine("Error: OrderRequest is null");
+                    return new OrderListResponse { Orders = new List<OrderResponse>() };
+                }
+
                 using AdvanceCsharpContext context = new(_context);
 
                 // Check if context.Orders is not null
@@ -98,10 +139,10 @@ namespace advance_Csharp.Service.Service
                     // Retrieve the orders for the given user ID
                     List<OrderResponse> orderResponses = await context.Orders
                         .Include(o => o.OrderDetails)
-                        .Where(o => o.UserId == userId)
+                        .Where(o => o.UserId == orderRequest.UserId)
                         .Select(o => new OrderResponse
                         {
-                            Message = "Order information of UserId" + userId,
+                            Message = "Order information of UserId" + orderRequest.UserId,
                             OrderId = o.Id,
                             UserId = o.UserId,
                             OrderDate = o.OrderDate.HasValue ? o.OrderDate.Value
@@ -153,17 +194,20 @@ namespace advance_Csharp.Service.Service
         /// <param name="orderId"></param>
         /// <param name="newStatus"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateOrderStatus(Guid userId, bool newStatus)
+        public async Task<UpdateOrderStatusResponse> UpdateOrderStatus(UpdateOrderStatusRequest request)
         {
+            UpdateOrderStatusResponse response = new();
+
             try
             {
                 using AdvanceCsharpContext context = new(_context);
+                // Retrieve the order to be updated based on userId
                 Order? order = null;
 
                 if (context.Orders != null)
                 {
                     order = await context.Orders
-                        .Where(o => o.Id == userId)
+                        .Where(o => o.UserId == request.UserId) // Fix here, use o.UserId instead of o.Id
                         .Include(o => o.OrderDetails)
                         .FirstOrDefaultAsync();
                 }
@@ -176,16 +220,16 @@ namespace advance_Csharp.Service.Service
                 if (order != null)
                 {
                     // Update the order status
-                    order.OrderDetails?.ForEach(od => od.OrderStatus = newStatus);
+                    order.OrderDetails?.ForEach(od => od.OrderStatus = request.NewStatus);
 
                     // Save changes to the database
                     _ = await context.SaveChangesAsync();
 
                     // If the order status is updated to true, reduce product quantities
-                    if (newStatus)
+                    if (request.NewStatus)
                     {
                         using AdvanceCsharpContext productContext = new(_context);
-                        if (order != null && order.OrderDetails != null && productContext.Products != null)
+                        if (order.OrderDetails != null && productContext.Products != null)
                         {
                             foreach (OrderDetail orderDetail in order.OrderDetails)
                             {
@@ -201,17 +245,23 @@ namespace advance_Csharp.Service.Service
                         }
                     }
 
-                    return true;
+                    response.Success = true;
                 }
-
-                return false;
+                else
+                {
+                    // If the order is not found
+                    response.Message = $"Order with UserId {request.UserId} not found for updating status.";
+                }
             }
             catch (Exception ex)
             {
                 // Handle exceptions, log, or rethrow
                 Console.WriteLine($"An error occurred while updating the order status: {ex.Message}");
-                return false;
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
             }
+
+            return response;
         }
 
         /// <summary>
@@ -219,10 +269,17 @@ namespace advance_Csharp.Service.Service
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public async Task<OrderResponse> DeleteOrder(Guid orderId)
+        public async Task<OrderResponse> DeleteOrder(DeleteOrderRequest request)
         {
             try
             {
+                if (request == null)
+                {
+                    // Handle the case where the request is null
+                    Console.WriteLine("Error: DeleteOrderRequest is null");
+                    return new OrderResponse();
+                }
+
                 using AdvanceCsharpContext context = new(_context);
 
                 // Check if context.Orders is not null before querying
@@ -230,7 +287,7 @@ namespace advance_Csharp.Service.Service
                 {
                     // Retrieve the order to be deleted
                     Order? orderToDelete = await context.Orders
-                        .Where(o => o.Id == orderId)
+                        .Where(o => o.Id == request.OrderId)
                         .Include(o => o.OrderDetails)
                         .FirstOrDefaultAsync();
 
@@ -254,14 +311,14 @@ namespace advance_Csharp.Service.Service
                             }).ToList() ?? new List<OrderDetailResponse>()
                         };
 
-                        // Remove the order from the context
-                        _ = context.Orders.Remove(orderToDelete);
+                        orderToDelete.IsDelete = true;
+                        _ = context.Orders.Update(orderToDelete);
 
                         // Save changes to the database
                         _ = await context.SaveChangesAsync();
 
                         // Display a message indicating successful deletion
-                        Console.WriteLine($"Order with OrderId {orderId} has been successfully deleted.");
+                        Console.WriteLine($"Order with OrderId {request.OrderId} has been successfully deleted.");
 
                         // Return the deleted order information
                         return deletedOrderResponse;
@@ -269,10 +326,7 @@ namespace advance_Csharp.Service.Service
                     else
                     {
                         // Display a message indicating that the order was not found
-                        Console.WriteLine($"Order with OrderId {orderId} not found for deletion.");
-
-                        // You can decide what to return in case of not finding the order.
-                        // For now, returning an empty OrderResponse.
+                        Console.WriteLine($"Order with OrderId {request.OrderId} not found for deletion.");
                         return new OrderResponse();
                     }
                 }
@@ -280,9 +334,6 @@ namespace advance_Csharp.Service.Service
                 {
                     // Handle the case where context.Orders is null
                     Console.WriteLine("Error: context.Orders is null");
-
-                    // You can decide what to return in case of a null context.Orders.
-                    // For now, returning an empty OrderResponse.
                     return new OrderResponse();
                 }
             }
@@ -290,9 +341,6 @@ namespace advance_Csharp.Service.Service
             {
                 // Handle exceptions, log, or rethrow
                 Console.WriteLine($"An error occurred while deleting the order: {ex.Message}");
-
-                // You can decide what to return in case of an error.
-                // For now, returning an empty OrderResponse.
                 return new OrderResponse();
             }
         }
@@ -327,7 +375,7 @@ namespace advance_Csharp.Service.Service
             if (cartDetailsQuery != null)
             {
                 return await cartDetailsQuery
-                    .Where(cd => cd.Cart != null && cd.Cart.UserId == userId)
+                    .Where(cd => cd.Cart != null && cd.Cart.UserId == userId && !cd.IsDelete)
                     .ToListAsync();
             }
             else

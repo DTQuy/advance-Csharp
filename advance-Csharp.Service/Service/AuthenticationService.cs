@@ -16,7 +16,6 @@ namespace advance_Csharp.Service.Service
         private readonly IUserService userService;
         private readonly IUserRoleService userRoleService;
         private readonly IRoleService roleService;
-        private readonly IJwtService jwtUtils;
 
         /// <summary>
         /// Authentication Service
@@ -24,12 +23,12 @@ namespace advance_Csharp.Service.Service
         /// <param name="userService"></param>
         /// <param name="jwtUtils"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public AuthenticationService(IUserService userService, IUserRoleService userRoleService, IRoleService roleService, IJwtService jwtUtils)
+        public AuthenticationService(IUserService userService, IUserRoleService userRoleService, IRoleService roleService)
         {
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
             this.roleService = roleService ?? throw new ArgumentNullException(nameof(roleService));
             this.userRoleService = userRoleService ?? throw new ArgumentNullException(nameof(roleService));
-            this.jwtUtils = jwtUtils ?? throw new ArgumentNullException(nameof(jwtUtils));
+
         }
 
         public async Task<AuthenticationRegisterResponse> RegisterUser(AuthenticationRegisterRequest request)
@@ -125,7 +124,7 @@ namespace advance_Csharp.Service.Service
             return response;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// AccountAuthentication
         /// </summary>
         /// <param name="Request"></param>
@@ -190,7 +189,7 @@ namespace advance_Csharp.Service.Service
             }
 
             return response;
-        }
+        }*/
 
     }
 }

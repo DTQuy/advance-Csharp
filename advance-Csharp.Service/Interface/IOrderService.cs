@@ -17,7 +17,7 @@ namespace advance_Csharp.Service.Interface
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<OrderListResponse> GetOrdersByUserId(Guid userId);
+        Task<OrderListResponse> GetOrdersByUserId(OrderRequest orderRequest);
 
         /// <summary>
         /// Update Order Status
@@ -25,13 +25,13 @@ namespace advance_Csharp.Service.Interface
         /// <param name="orderId"></param>
         /// <param name="newStatus"></param>
         /// <returns></returns>
-        Task<bool> UpdateOrderStatus(Guid userId, bool newStatus);
+        Task<UpdateOrderStatusResponse> UpdateOrderStatus(UpdateOrderStatusRequest request);
 
         /// <summary>
         /// DeleteOrder
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        Task<OrderResponse> DeleteOrder(Guid orderId);
+        Task<OrderResponse> DeleteOrder(DeleteOrderRequest request);
     }
 }

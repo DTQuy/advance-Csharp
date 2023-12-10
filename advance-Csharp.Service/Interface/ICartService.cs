@@ -9,34 +9,21 @@ namespace advance_Csharp.Service.Interface
         /// Get All
         /// </summary>
         /// <returns></returns>
-        Task<List<CartResponse>> GetAllCarts();
+        Task<GetAllCartResponse> GetAllCarts(GetAllCartRequest request);
 
         /// <summary>
         /// Get Cart By User Id
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<CartResponse> GetCartByUserId(Guid userId);
+        Task<CartResponse> GetCartByUserId(GetCartByUserIdRequest request);
 
         /// <summary>
         /// AddProductToCart
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<bool> AddProductToCart(CartRequest request);
-
-        /// <summary>
-        /// GetProductPriceByIdAsync
-        /// </summary>
-        /// <param name="productId"></param>
-        /// <returns></returns>
-
-        /// <summary>
-        /// ViewCart
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        Task<CartResponse> ViewCart(Guid userId);
+        Task<AddProductToCartResponse> AddProductToCart(CartRequest request);
 
         /// <summary>
         /// DeleteProductFromCart
@@ -44,7 +31,7 @@ namespace advance_Csharp.Service.Interface
         /// <param name="userId"></param>
         /// <param name="productId"></param>
         /// <returns></returns>
-        Task<bool> DeleteProductFromCart(Guid userId, Guid productId);
+        Task<CartResponse> DeleteProductFromCart(DeleteProductFromCartRequest request);
 
         /// <summary>
         /// UpdateQuantity
@@ -53,7 +40,7 @@ namespace advance_Csharp.Service.Interface
         /// <param name="productId"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        Task<bool> UpdateQuantity(Guid userId, Guid productId, int quantity);
+        Task<bool> UpdateQuantity(UpdateProductQuantityRequest request);
     }
 
 }

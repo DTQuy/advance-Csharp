@@ -28,13 +28,6 @@ namespace advance_Csharp.Service.Interface
         Task<ProductUpdateResponse> UpdateProduct(ProductUpdateRequest request);
 
         /// <summary>
-        /// delete product
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        Task<ProductDeleteResponse> DeleteProduct(ProductDeleteRequest request);
-
-        /// <summary>
         /// DeleteProduct by id
         /// </summary>
         /// <param name="id"></param>

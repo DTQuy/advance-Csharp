@@ -28,6 +28,11 @@
         public decimal TotalAmount { get; set; }
 
         /// <summary>
+        /// IsDelete
+        /// </summary>
+        public bool IsDelete { get; set; }
+
+        /// <summary>
         /// Order details
         /// </summary>
         public List<OrderDetailResponse>? OrderDetails { get; set; }

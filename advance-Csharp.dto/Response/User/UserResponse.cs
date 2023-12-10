@@ -45,7 +45,14 @@
         /// </summary>
         public DateTimeOffset CreatedAt { get; set; }
 
-        public string Token { get; set; } = string.Empty;
+        /// <summary>
+        /// IsDelete
+        /// </summary>
+        public bool IsDelete { get; set; }
+
+        /// <summary>
+        /// Token
+        /// </summary>
 
         /// <summary>
         /// Created At UtcNow

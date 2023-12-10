@@ -33,6 +33,11 @@ namespace advance_Csharp.Database.Models
         /// </summary>
         public int Quantity { get; set; }
 
+        /// <summary>
+        /// IsDelete
+        /// </summary>
+        public bool IsDelete { get; set; }
+
         [ForeignKey("CartId")]
         public Cart? Cart { get; set; }
 

@@ -26,5 +26,10 @@
         /// Quantity
         /// </summary>
         public int Quantity { get; set; }
+
+        /// <summary>
+        /// IsDelete
+        /// </summary>
+        public bool IsDelete { get; set; }
     }
 }
