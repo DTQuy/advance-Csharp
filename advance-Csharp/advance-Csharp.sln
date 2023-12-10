@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "advance-Csharp.Database", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8CDB4761-BC9A-45D3-93E8-6DE3E04B9107}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "advance-Csharp.Test", "..\advance-Csharp.Test\advance-Csharp.Test.csproj", "{8D9CE354-51AE-4B34-B726-5B35F13CB9C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{3C717BF6-A0FB-4E5B-A4F3-3302409E40D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C717BF6-A0FB-4E5B-A4F3-3302409E40D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C717BF6-A0FB-4E5B-A4F3-3302409E40D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D9CE354-51AE-4B34-B726-5B35F13CB9C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D9CE354-51AE-4B34-B726-5B35F13CB9C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D9CE354-51AE-4B34-B726-5B35F13CB9C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D9CE354-51AE-4B34-B726-5B35F13CB9C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

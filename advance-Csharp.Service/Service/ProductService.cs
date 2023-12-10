@@ -10,7 +10,7 @@ namespace advance_Csharp.Service.Service
     public class ProductService : IProductService
     {
 
-        private readonly DbContextOptions<AdvanceCsharpContext> dbContextOptions; // Add this field
+        private readonly DbContextOptions<AdvanceCsharpContext> dbContextOptions;
 
         public ProductService(DbContextOptions<AdvanceCsharpContext> dbContextOptions)
         {
