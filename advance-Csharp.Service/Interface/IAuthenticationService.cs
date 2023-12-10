@@ -5,6 +5,11 @@ namespace advance_Csharp.Service.Interface
 {
     public interface IAuthenticationService
     {
+        /// <summary>
+        /// RegisterUser
+        /// </summary>
+        /// <param name="Request"></param>
+        /// <returns></returns>
         Task<AuthenticationRegisterResponse> RegisterUser(AuthenticationRegisterRequest Request);
         /*Task<AuthenticationLoginResponse> AccountAuthentication(AuthenticationLoginRequest Request);*/
     }

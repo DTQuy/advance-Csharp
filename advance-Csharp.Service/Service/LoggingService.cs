@@ -11,11 +11,19 @@ namespace advance_Csharp.Service.Service
             _logger = LogManager.GetLogger(typeof(LoggingService));
         }
 
+        /// <summary>
+        /// LogError
+        /// </summary>
+        /// <param name="exception"></param>
         public void LogError(Exception exception)
         {
             _logger.Error(exception);
         }
 
+        /// <summary>
+        /// LogInfo
+        /// </summary>
+        /// <param name="message"></param>
         public void LogInfo(string message)
         {
             _logger.Info(message);

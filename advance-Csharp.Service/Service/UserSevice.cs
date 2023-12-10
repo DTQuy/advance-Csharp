@@ -317,7 +317,6 @@ namespace advance_Csharp.Service.Service
             }
         }
 
-
         /// <summary>
         /// delete user
         /// </summary>

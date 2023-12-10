@@ -1,7 +1,6 @@
 ﻿using advance_Csharp.dto.Request.Product;
 using advance_Csharp.dto.Response.Product;
 using advance_Csharp.Service.Interface;
-using advance_Csharp.Service.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace advance_Csharp.Controllers
@@ -13,6 +12,9 @@ namespace advance_Csharp.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+        /// <summary>
+        /// IProductService
+        /// </summary>
         private readonly IProductService _productService;
 
         /// <summary>

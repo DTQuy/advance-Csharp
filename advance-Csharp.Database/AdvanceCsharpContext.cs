@@ -69,6 +69,12 @@ namespace advance_Csharp.Database
         /// </summary>
         public DbSet<OrderDetail>? OrderDetails { get; set; }
 
+        /// <summary>
+        /// SaveChangesAsync
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task<int> SaveChangesAsync(string email)
         {
             throw new NotImplementedException();

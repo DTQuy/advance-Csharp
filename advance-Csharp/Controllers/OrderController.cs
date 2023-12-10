@@ -5,11 +5,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace advance_Csharp.Controllers
 {
+    /// <summary>
+    /// OrderController
+    /// </summary>
     [ApiController]
     [Route("api/orders")]
     public class OrderController : ControllerBase
     {
+        /// <summary>
+        /// IOrderService
+        /// </summary>
         private readonly IOrderService _orderService;
+
+        /// <summary>
+        /// OrderController(IOrderService orderService)
+        /// </summary>
+        /// <param name="orderService"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));

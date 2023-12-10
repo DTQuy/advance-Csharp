@@ -9,13 +9,25 @@ namespace advance_Csharp.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
+        /// <summary>
+        /// IAuthenticationService
+        /// </summary>
         private readonly IAuthenticationService authService;
 
+        /// <summary>
+        /// AuthController
+        /// </summary>
+        /// <param name="authService"></param>
         public AuthController(IAuthenticationService authService)
         {
             this.authService = authService;
         }
 
+        /// <summary>
+        /// Register
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] AuthenticationRegisterRequest request)
         {

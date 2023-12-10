@@ -20,7 +20,9 @@ namespace advance_Csharp.Database.Models
         /// </summary>
         public DateTimeOffset? OrderDate { get; set; }
 
-        // Navigation property for OrderDetails
+        /// <summary>
+        /// Navigation property for OrderDetails
+        /// </summary>
         public List<OrderDetail>? OrderDetails { get; set; }
     }
 }

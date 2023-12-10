@@ -6,6 +6,11 @@ namespace advance_Csharp.Service.Seeding
 {
     public class DbInitializer
     {
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public static async Task Initialize(AdvanceCsharpContext context)
         {
             if (context != null)

@@ -30,7 +30,11 @@ namespace advance_Csharp.Service.Service
             this.userRoleService = userRoleService ?? throw new ArgumentNullException(nameof(roleService));
 
         }
-
+        /// <summary>
+        /// RegisterUser
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public async Task<AuthenticationRegisterResponse> RegisterUser(AuthenticationRegisterRequest request)
         {
             AuthenticationRegisterResponse response = new();

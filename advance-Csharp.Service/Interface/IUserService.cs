@@ -33,14 +33,12 @@ namespace advance_Csharp.Service.Interface
         /// <returns></returns>
         Task<UserUpdateResponse> UpdateUser(UserUpdateRequest request);
 
-        Task<UserDeleteResponse> DeleteUser(UserDeleteRequest request);
-
-        /*/// <summary>
-        /// GenerateToken
+        /// <summary>
+        /// DeleteUser
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<UserGenerateTokenResponse> GenerateToken(UserGenerateTokenRequest request);*/
+        Task<UserDeleteResponse> DeleteUser(UserDeleteRequest request);
 
         /// <summary>
         /// SearchUser
@@ -48,5 +46,12 @@ namespace advance_Csharp.Service.Interface
         /// <param name="request"></param>
         /// <returns></returns>
         Task<UserSearchResponse> SearchUser(UserSearchRequest request);
+
+        /*/// <summary>
+        /// GenerateToken
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<UserGenerateTokenResponse> GenerateToken(UserGenerateTokenRequest request);*/
     }
 }

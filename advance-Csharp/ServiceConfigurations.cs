@@ -7,6 +7,10 @@ namespace advance_Csharp
 {
     public static class ServiceConfigurations
     {
+        /// <summary>
+        /// ConfigureServiceManager
+        /// </summary>
+        /// <param name="services"></param>
         public static void ConfigureServiceManager(this IServiceCollection services)
         {
             _ = services.AddHttpContextAccessor();
@@ -33,6 +37,10 @@ namespace advance_Csharp
 
         }
 
+        /// <summary>
+        /// ConfigureCors
+        /// </summary>
+        /// <param name="services"></param>
         public static void ConfigureCors(this IServiceCollection services)
         {
             _ = services.AddCors(options =>
@@ -46,6 +54,12 @@ namespace advance_Csharp
             });
         }
 
+        /// <summary>
+        /// ConfigureSqlContext
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
         {
             if (configuration == null)

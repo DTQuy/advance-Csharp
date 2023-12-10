@@ -12,6 +12,9 @@ namespace advance_Csharp.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        /// <summary>
+        /// IUserService
+        /// </summary>
         private readonly IUserService _userService;
 
         /// <summary>
@@ -21,6 +24,7 @@ namespace advance_Csharp.Controllers
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
+
         /// <summary>
         /// get-user-admin
         /// </summary>

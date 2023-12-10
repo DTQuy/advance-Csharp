@@ -1,12 +1,5 @@
 ﻿using advance_Csharp.Database;
-using advance_Csharp.Database.Models;
 using advance_Csharp.Service.Interface;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace advance_Csharp.Service.Service
 {
@@ -18,10 +11,16 @@ namespace advance_Csharp.Service.Service
 
             _context = context;
         }
+
+        /// <summary>
+        /// CompleteAsync
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public async Task<bool> CompleteAsync(string email)
         {
             return await _context.SaveChangesAsync(email) > 0;
         }
     }
- 
+
 }

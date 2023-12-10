@@ -1,6 +1,6 @@
 ﻿namespace advance_Csharp.dto.Request.Cart
 {
-    public class GetAllCartRequest
+    public class GetAllCartRequest : IPagingRequest
     {
         /// <summary>
         /// Page size

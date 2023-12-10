@@ -5,11 +5,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace advance_Csharp.Controllers
 {
+    /// <summary>
+    /// CartController
+    /// </summary>
     [ApiController]
     [Route("api/cart")]
     public class CartController : Controller
     {
+        /// <summary>
+        /// ICartService
+        /// </summary>
         private readonly ICartService _cartService;
+
+        /// <summary>
+        ///  CartController(ICartService cartService)
+        /// </summary>
+        /// <param name="cartService"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public CartController(ICartService cartService)
         {
             _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
@@ -61,6 +73,7 @@ namespace advance_Csharp.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
         /// <summary>
         /// AddProductToCart
         /// </summary>

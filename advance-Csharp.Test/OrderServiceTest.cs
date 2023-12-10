@@ -1,9 +1,6 @@
 ﻿using advance_Csharp.dto.Request.Order;
-using advance_Csharp.dto.Request.User;
 using advance_Csharp.dto.Response.Order;
-using advance_Csharp.dto.Response.User;
 using advance_Csharp.Service.Interface;
-using advance_Csharp.Service.Service;
 
 namespace advance_Csharp.Test
 {

@@ -12,7 +12,6 @@ namespace advance_Csharp.Service.Service
     public class JwtService : IJwtService
     {
         private readonly AppSetting appSetting;
-
         public JwtService(IOptions<AppSetting> appSettings)
         {
             appSetting = appSettings.Value;

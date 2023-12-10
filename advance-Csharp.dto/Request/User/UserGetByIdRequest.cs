@@ -2,6 +2,9 @@
 {
     public class UserGetByIdRequest
     {
+        /// <summary>
+        /// Id
+        /// </summary>
         public Guid Id { get; set; }
     }
 }

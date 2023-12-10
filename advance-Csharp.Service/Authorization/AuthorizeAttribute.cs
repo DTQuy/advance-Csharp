@@ -1,20 +1,30 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using advance_Csharp.Database.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using advance_Csharp.Database.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace advance_Csharp.Service.Authorization
 {
     public class CustomAuthorizeAttribute : ActionFilterAttribute, IAuthorizationFilter
     {
+        /// <summary>
+        /// RoleName
+        /// </summary>
         public string RoleName { get; set; }
 
+        /// <summary>
+        /// CustomAuthorizeAttribute
+        /// </summary>
+        /// <param name="roleName"></param>
         public CustomAuthorizeAttribute(string roleName)
         {
             RoleName = roleName;
         }
 
+        /// <summary>
+        /// OnAuthorization
+        /// </summary>
+        /// <param name="context"></param>
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             // Skip authorization if action is decorated with [AllowAnonymous] attribute

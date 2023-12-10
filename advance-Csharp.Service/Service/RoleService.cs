@@ -1,17 +1,9 @@
-﻿using advance_Csharp.Database.Models;
-using advance_Csharp.Database;
-using advance_Csharp.dto.Request.AppVersion;
-using advance_Csharp.dto.Response.AppVersion;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using advance_Csharp.dto.Response.Role;
+﻿using advance_Csharp.Database;
+using advance_Csharp.Database.Models;
 using advance_Csharp.dto.Request.Role;
-using advance_Csharp.dto.Response.User;
+using advance_Csharp.dto.Response.Role;
 using advance_Csharp.Service.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace advance_Csharp.Service.Service
 {

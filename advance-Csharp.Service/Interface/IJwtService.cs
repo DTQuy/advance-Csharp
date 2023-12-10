@@ -1,15 +1,21 @@
 ﻿using advance_Csharp.dto.Response.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace advance_Csharp.Service.Interface
 {
     public interface IJwtService
     {
+        /// <summary>
+        /// GenerateAccessToken
+        /// </summary>
+        /// <param name="userResponse"></param>
+        /// <returns></returns>
         Task<string> GenerateAccessToken(UserResponse userResponse);
+
+        /// <summary>
+        /// ValidateAccessToken
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         Guid? ValidateAccessToken(string token);
     }
 }

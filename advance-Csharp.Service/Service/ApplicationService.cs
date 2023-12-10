@@ -3,7 +3,6 @@ using advance_Csharp.Database.Models;
 using advance_Csharp.dto.Request.AppVersion;
 using advance_Csharp.dto.Response.AppVersion;
 using advance_Csharp.Service.Interface;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace advance_Csharp.Service.Service
@@ -14,7 +13,7 @@ namespace advance_Csharp.Service.Service
 
         public ApplicationService(DbContextOptions<AdvanceCsharpContext> dbContextOptions)
         {
-            
+
             this.dbContextOptions = dbContextOptions;
         }
 

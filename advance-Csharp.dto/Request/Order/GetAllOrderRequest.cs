@@ -1,6 +1,6 @@
 ﻿namespace advance_Csharp.dto.Request.Order
 {
-    public class GetAllOrderRequest
+    public class GetAllOrderRequest : IPagingRequest
     {
         /// <summary>
         /// Page size
