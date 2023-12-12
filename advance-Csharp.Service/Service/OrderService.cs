@@ -88,7 +88,7 @@ namespace advance_Csharp.Service.Service
                 // Create OrderResponse
                 OrderResponse orderResponse = new()
                 {
-                    Message = "Create order success for User Id: "+ order.UserId,
+                    Message = "Create order success for User Id: " + order.UserId,
                     OrderId = order.Id,
                     UserId = order.UserId,
                     TotalAmount = order.TotalAmount,
@@ -100,7 +100,7 @@ namespace advance_Csharp.Service.Service
                         Quantity = od.Quantity,
                         OrderStatus = od.OrderStatus // Include OrderStatus in the response
                     }).ToList() ?? new List<OrderDetailResponse>(),
-                    // Add other information if needed
+
                 };
 
                 return orderResponse;
@@ -178,8 +178,8 @@ namespace advance_Csharp.Service.Service
                 Console.WriteLine($"An error occurred while retrieving all orders: {ex.Message}");
                 return new GetAllOrderResponse
                 {
-                    TotalOrder = 0, // Set TotalOrder to 0 in case of an error
-                    Orders = new List<OrderResponse>() // Set Orders to an empty list
+                    TotalOrder = 0,
+                    Orders = new List<OrderResponse>()
                 };
             }
         }
@@ -225,7 +225,7 @@ namespace advance_Csharp.Service.Service
                                 Quantity = od.Quantity,
                                 OrderStatus = od.OrderStatus,
                                 OrderStatusDescription = od.OrderStatus ? "Đã thanh toán" : "Chưa thanh toán"
-                                // Add other properties as needed
+
                             }).ToList() : new List<OrderDetailResponse>()
                         })
                         .ToListAsync();
@@ -251,8 +251,6 @@ namespace advance_Csharp.Service.Service
             {
                 // Handle exceptions, log, or rethrow
                 Console.WriteLine($"An error occurred while getting orders: {ex.Message}");
-
-                // Return an empty OrderListResponse or take other appropriate actions
                 return new OrderListResponse { Orders = new List<OrderResponse>() };
             }
         }
@@ -300,11 +298,8 @@ namespace advance_Csharp.Service.Service
                         using AdvanceCsharpContext productContext = new(_context);
                         if (order.OrderDetails != null && productContext.Products != null)
                         {
-                            // ... (existing code)
                         }
                     }
-
-                    // Set the success response and message
                     response.Success = true;
                     response.Message = "Order status updated successfully.";
 
@@ -323,7 +318,6 @@ namespace advance_Csharp.Service.Service
                             Quantity = od.Quantity,
                             OrderStatus = od.OrderStatus
                         }).ToList() ?? new List<OrderDetailResponse>(),
-                        // Add other information if needed
                     };
                 }
                 else

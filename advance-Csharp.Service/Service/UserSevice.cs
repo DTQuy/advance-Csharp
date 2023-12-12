@@ -91,7 +91,7 @@ namespace advance_Csharp.Service.Service
             try
             {
                 using AdvanceCsharpContext context = new(dbContextOptions);
-                // Check if context.Users is null
+                // Check is null
                 if (context.Users == null)
                 {
                     // Handle the case where context.Users is null

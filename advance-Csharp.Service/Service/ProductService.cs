@@ -339,7 +339,7 @@ namespace advance_Csharp.Service.Service
             {
                 // Log errors or send errors to a logging service
                 Console.WriteLine($"Error while getting product by ID {productId}: {ex.Message}");
-                throw; // Re-throw the exception to propagate it up the call stack
+                throw;
             }
         }
 
@@ -378,7 +378,7 @@ namespace advance_Csharp.Service.Service
             {
                 // Log errors or send errors to a logging service
                 Console.WriteLine($"Error while getting product price by ID {productId}: {ex.Message}");
-                throw; // Re-throw the exception to propagate it up the call stack
+                throw;
             }
         }
     }

@@ -419,7 +419,7 @@ namespace advance_Csharp.Service.Service
             {
                 // Handle exceptions or log errors
                 Console.WriteLine($"Error while getting product price by ID {productId}: {ex.Message}");
-                return string.Empty; // Return an empty string or handle the error case accordingly
+                return string.Empty;
             }
         }
 
