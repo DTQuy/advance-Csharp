@@ -2,16 +2,16 @@
 using advance_Csharp.dto.Response.Order;
 using advance_Csharp.Service.Interface;
 
-namespace advance_Csharp.Test
+namespace advance_Csharp.Test.UnitTest
 {
     [TestClass]
     public class OrderServiceTest
     {
-        private readonly IOrderService orderService;
+        private readonly IOrderService _orderService;
 
-        public OrderServiceTest(IOrderService orderService)
+        public OrderServiceTest()
         {
-            this.orderService = orderService;
+            _orderService = DomainServiceCollectionExtensions.SetupOrderService();
         }
 
 
@@ -28,7 +28,7 @@ namespace advance_Csharp.Test
                 PageSize = 10,
 
             };
-            GetAllOrderResponse response = await orderService.GetAllOrders(request);
+            GetAllOrderResponse response = await _orderService.GetAllOrders(request);
             Assert.IsNotNull(response);
             Assert.IsTrue(response.Orders.Count > 0);
         }
@@ -45,11 +45,10 @@ namespace advance_Csharp.Test
                 request.UserId = new Guid("7950ca07-f4f9-4c22-921f-0c0d38c9b4a1");
 
             }
-            OrderListResponse response = await orderService.GetOrdersByUserId(request);
+            OrderListResponse response = await _orderService.GetOrdersByUserId(request);
             Assert.IsNotNull(response);
             Assert.IsTrue(response != null && response.Orders != null && response.Orders.Count > 0);
 
         }
     }
-
 }

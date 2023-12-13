@@ -201,12 +201,34 @@ namespace advance_Csharp.Service.Service
                 };
 
                 // Update product information
-                existingProduct.Name = request.Name;
-                existingProduct.Price = request.Price;
-                existingProduct.Quantity = request.Quantity;
-                existingProduct.Unit = request.Unit;
-                existingProduct.Images = request.Images;
-                existingProduct.Category = request.Category;
+                if (!string.IsNullOrEmpty(request.Name))
+                {
+                    existingProduct.Name = request.Name;
+                }
+
+                if (!string.IsNullOrEmpty(request.Price))
+                {
+                    existingProduct.Price = request.Price;
+                }
+                if (request.Quantity != 0)
+                {
+                    existingProduct.Quantity = request.Quantity;
+                }
+
+                if (!string.IsNullOrEmpty(request.Unit))
+                {
+                    existingProduct.Unit = request.Unit;
+                }
+
+                if (request.Images != null && request.Images.Any())
+                {
+                    existingProduct.Images = request.Images;
+                }
+
+                if (!string.IsNullOrEmpty(request.Category))
+                {
+                    existingProduct.Category = request.Category;
+                }
 
                 // Save changes to the database
                 _ = await context.SaveChangesAsync();

@@ -2,16 +2,16 @@
 using advance_Csharp.dto.Response.User;
 using advance_Csharp.Service.Interface;
 
-namespace advance_Csharp.Test
+namespace advance_Csharp.Test.UnitTest
 {
     [TestClass]
     public class UserServiceTest
     {
-        private readonly IUserService userService;
+        private readonly IUserService _userService;
 
-        public UserServiceTest(IUserService userService)
+        public UserServiceTest()
         {
-            this.userService = userService;
+            _userService = DomainServiceCollectionExtensions.SetupUserService();
         }
 
         /// <summary>
@@ -29,9 +29,9 @@ namespace advance_Csharp.Test
                 PhoneNumber = string.Empty,
 
             };
-            UserGetListResponse response = await userService.GetApplicationUserList(request);
+            UserGetListResponse response = await _userService.GetApplicationUserList(request);
             Assert.IsNotNull(response);
-            Assert.IsTrue(response.Data.Count > 0);
+            Assert.IsTrue(response.TotalUser > 0);
         }
 
         /// <summary>
@@ -49,9 +49,9 @@ namespace advance_Csharp.Test
                 PhoneNumber = string.Empty,
 
             };
-            UserGetListResponse response = await userService.GetApplicationUserList(request);
+            UserGetListResponse response = await _userService.GetApplicationUserList(request);
             Assert.IsNotNull(response);
-            Assert.IsTrue(response.Data.Count > 0);
+            Assert.IsTrue(response.TotalUser > 0);
         }
 
         /// <summary>
@@ -69,9 +69,9 @@ namespace advance_Csharp.Test
                 PhoneNumber = "0974322724",
 
             };
-            UserGetListResponse response = await userService.GetApplicationUserList(request);
+            UserGetListResponse response = await _userService.GetApplicationUserList(request);
             Assert.IsNotNull(response);
-            Assert.IsTrue(response.Data.Count > 0);
+            Assert.IsTrue(response.TotalUser > 0);
         }
     }
 }

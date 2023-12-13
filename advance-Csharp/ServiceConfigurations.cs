@@ -17,21 +17,14 @@ namespace advance_Csharp
             _ = services.AddScoped<IProductService, ProductService>();
             _ = services.AddScoped<IAuthenticationService, AuthenticationService>();
             _ = services.AddScoped<IApplicationService, ApplicationService>();
-            /* _ = services.AddTransient<IUserService, UserService>();*/
-            _ = services.AddScoped<IUserService>(provider =>
-           {
-               return new UserService(
-                   provider.GetRequiredService<IHttpContextAccessor>(),
-                   provider.GetRequiredService<DbContextOptions<AdvanceCsharpContext>>()
-               );
-           });
-
+            _ = services.AddScoped<IUserService, UserService>();
             _ = services.AddScoped<IRoleService, RoleService>();
             _ = services.AddScoped<IJwtService, JwtService>();
             _ = services.AddScoped<IUserRoleService, UserRoleService>();
             _ = services.AddScoped<IUnitWork, UnitWork>();
             _ = services.AddScoped<ICartService, CartService>();
             _ = services.AddScoped<IOrderService, OrderService>();
+            _ = services.AddHttpContextAccessor();
 
 
 

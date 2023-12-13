@@ -2,16 +2,19 @@
 using advance_Csharp.dto.Response.Cart;
 using advance_Csharp.Service.Interface;
 
-namespace advance_Csharp.Test
+namespace advance_Csharp.Test.UnitTest
 {
     [TestClass]
     public class CartServiceTest
     {
-        private readonly ICartService cartService;
+        private readonly ICartService _cartService;
 
-        public CartServiceTest(ICartService cartService)
+        /// <summary>
+        /// CartServiceTest
+        /// </summary>
+        public CartServiceTest()
         {
-            this.cartService = cartService;
+            _cartService = DomainServiceCollectionExtensions.SetupCartService();
         }
 
         /// <summary>
@@ -26,7 +29,7 @@ namespace advance_Csharp.Test
                 request.PageSize = 1;
                 request.PageIndex = 10;
             }
-            GetAllCartResponse response = await cartService.GetAllCarts(request);
+            GetAllCartResponse response = await _cartService.GetAllCarts(request);
             Assert.IsNotNull(response);
             Assert.IsTrue(response?.Carts?.Count > 0);
         }
@@ -43,7 +46,7 @@ namespace advance_Csharp.Test
                 request.UserId = new Guid("7950ca07-f4f9-4c22-921f-0c0d38c9b4a1");
 
             }
-            CartResponse response = await cartService.GetCartByUserId(request);
+            CartResponse response = await _cartService.GetCartByUserId(request);
             Assert.IsNotNull(response);
             Assert.IsTrue(response != null && response.CartDetails != null && response.CartDetails.Count > 0);
 

@@ -91,7 +91,7 @@ namespace advance_Csharp.Service.Service
             try
             {
                 using AdvanceCsharpContext context = new(dbContextOptions);
-                // Check is null
+                // Check context.Users is null
                 if (context.Users == null)
                 {
                     // Handle the case where context.Users is null
@@ -257,17 +257,35 @@ namespace advance_Csharp.Service.Service
                 };
 
                 // Update user information
-                existingUser.LastName = request.LastName;
-                existingUser.FirstName = request.FirstName;
-                existingUser.Email = request.Email;
+                if (!string.IsNullOrEmpty(request.LastName))
+                {
+                    existingUser.LastName = request.LastName;
+                }
+
+                if (!string.IsNullOrEmpty(request.FirstName))
+                {
+                    existingUser.FirstName = request.FirstName;
+                }
+
+                if (!string.IsNullOrEmpty(request.Email))
+                {
+                    existingUser.Email = request.Email;
+                }
 
                 if (!string.IsNullOrEmpty(request.Password))
                 {
                     existingUser.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
                 }
 
-                existingUser.PhoneNumber = request.PhoneNumber;
-                existingUser.Address = request.Address;
+                if (!string.IsNullOrEmpty(request.PhoneNumber))
+                {
+                    existingUser.PhoneNumber = request.PhoneNumber;
+                }
+
+                if (!string.IsNullOrEmpty(request.Address))
+                {
+                    existingUser.Address = request.Address;
+                }
 
                 // Save changes to the database
                 _ = await context.SaveChangesAsync();

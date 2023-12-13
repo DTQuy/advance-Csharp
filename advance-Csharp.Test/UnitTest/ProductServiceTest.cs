@@ -2,17 +2,19 @@ using advance_Csharp.dto.Request.Product;
 using advance_Csharp.dto.Response.Product;
 using advance_Csharp.Service.Interface;
 
-namespace advance_Csharp.Test
+namespace advance_Csharp.Test.UnitTest
 {
     [TestClass]
     public class ProductServiceTest
     {
-        private readonly IProductService productService;
+        private readonly IProductService _productService;
 
-
-        public ProductServiceTest(IProductService productService)
+        /// <summary>
+        /// ProductServiceTest
+        /// </summary>
+        public ProductServiceTest()
         {
-            this.productService = productService;
+            _productService = DomainServiceCollectionExtensions.SetupProductService();
         }
 
         /// <summary>
@@ -31,7 +33,7 @@ namespace advance_Csharp.Test
                 PriceFrom = string.Empty,
                 PriceTo = string.Empty,
             };
-            ProductGetListResponse response = await productService.GetApplicationProductList(request);
+            ProductGetListResponse response = await _productService.GetApplicationProductList(request);
             Assert.IsNotNull(response);
             Assert.IsTrue(response.Data.Count > 0);
         }
@@ -52,7 +54,7 @@ namespace advance_Csharp.Test
                 PriceFrom = string.Empty,
                 PriceTo = string.Empty,
             };
-            ProductGetListResponse response = await productService.GetApplicationProductList(request);
+            ProductGetListResponse response = await _productService.GetApplicationProductList(request);
             Assert.IsNotNull(response);
             Assert.IsTrue(response.Data.Count > 0);
         }
@@ -73,7 +75,7 @@ namespace advance_Csharp.Test
                 PriceFrom = string.Empty,
                 PriceTo = string.Empty,
             };
-            ProductGetListResponse response = await productService.GetApplicationProductList(request);
+            ProductGetListResponse response = await _productService.GetApplicationProductList(request);
             Assert.IsNotNull(response);
             Assert.IsTrue(response.Data.Count > 0);
         }
@@ -94,7 +96,7 @@ namespace advance_Csharp.Test
                 PriceFrom = "1000000",
                 PriceTo = "1100000",
             };
-            ProductGetListResponse response = await productService.GetApplicationProductList(request);
+            ProductGetListResponse response = await _productService.GetApplicationProductList(request);
             Assert.IsNotNull(response);
             Assert.IsTrue(response.Data.Count > 0);
         }
