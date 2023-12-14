@@ -1,6 +1,4 @@
-﻿using advance_Csharp.Database.Models;
-
-namespace advance_Csharp.dto.Response.UserRole
+﻿namespace advance_Csharp.dto.Response.UserRole
 {
     public class UserRoleGetByIdResponse
     {

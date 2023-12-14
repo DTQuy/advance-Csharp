@@ -20,7 +20,7 @@
         /// </summary>
         /// <param name="message"></param>
         /// <param name="deletedProduct"></param>
-        public ProductDeleteResponse(string message, ProductResponse deletedProduct) 
+        public ProductDeleteResponse(string message, ProductResponse deletedProduct)
         {
             Message = message;
             DeletedProduct = deletedProduct;

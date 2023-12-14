@@ -18,7 +18,7 @@
         /// <summary>
         /// Quantity
         /// </summary>
-        public int Quantity { get; set; } = 0;   
+        public int Quantity { get; set; } = 0;
 
         /// <summary>
         /// Unit

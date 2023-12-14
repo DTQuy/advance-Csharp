@@ -30,7 +30,7 @@
         /// <summary>
         /// Search: PriceFrom
         /// </summary>
-        public string PriceTo { get; set;} = string.Empty;
+        public string PriceTo { get; set; } = string.Empty;
 
 
     }

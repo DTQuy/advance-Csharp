@@ -1,6 +1,4 @@
-﻿using advance_Csharp.dto.Response.Product;
-
-namespace advance_Csharp.dto.Response.User
+﻿namespace advance_Csharp.dto.Response.User
 {
     public class UserUpdateResponse
     {
